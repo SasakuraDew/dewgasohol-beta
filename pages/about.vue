@@ -1,26 +1,35 @@
 <template>
-    <div class="about-page">
-        <h1>เกี่ยวกับ Dewgasohol</h1>
-        <p>
-            Dewgasohol คือเว็บไซต์ที่ให้ข้อมูลและบริการเกี่ยวกับแก๊สโซฮอล์ 
-            รวมถึงความรู้เกี่ยวกับเชื้อเพลิงชีวภาพ การใช้งาน และประโยชน์ต่าง ๆ 
-            เพื่อส่งเสริมการใช้พลังงานทางเลือกที่เป็นมิตรต่อสิ่งแวดล้อม
-        </p>
+    <div class="home-bg">
+    <V-container>
+        <V-row>
+            <V-col color="white" class="text-center">
+                <V-card color="white">
+                    <V-card-title class="black--text">
+                        <V-icon left color="blue">mdi-information</V-icon>
+                        เกี่ยวกับ Dewgasohol
+                    </V-card-title>
+                    <V-card-text class="black--text">
+                        Dewgasohol คือเว็บไซต์ที่ให้ข้อมูลและบริการเกี่ยวกับแก๊สโซฮอล์ 
+                        รวมถึงความรู้เกี่ยวกับเชื้อเพลิงชีวภาพ การใช้งาน และประโยชน์ต่าง ๆ 
+                        เพื่อส่งเสริมการใช้พลังงานทางเลือกที่เป็นมิตรต่อสิ่งแวดล้อม
+                    </V-card-text>
+                </V-card>
+            </V-col>
+        </V-row>
+        </V-container>
     </div>
 </template>
 
 <script>
-export default {
-    name: 'AboutPage'
-}
 </script>
 
 <style scoped>
-.about-page {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 24px;
-    background: #000000;
-    border-radius: 8px;
+.home-bg {
+    background: #fff !important;
+    min-height: 100vh;
+}
+v-container, v-row, v-col, v-card {
+    position: relative;
+    z-index: 2;
 }
 </style>

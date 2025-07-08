@@ -1,5 +1,5 @@
 <template>
-    <div class="home-bg home-bg-graphic">
+    <div class="home-bg">
         <v-container>
             <v-row >
                 <!-- ตลาดหุ้น -->
@@ -112,13 +112,6 @@ export default {
 .home-bg {
     background: #fff !important;
     min-height: 100vh;
-}
-.home-bg-graphic {
-    background-image: url('/1994408.jpg'); /* ใช้รูปที่มีใน static */
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    position: relative;
 }
 v-container, v-row, v-col, v-card {
     position: relative;

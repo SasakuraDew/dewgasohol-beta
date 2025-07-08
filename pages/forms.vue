@@ -101,3 +101,14 @@
     },
   }
 </script>
+
+<style scoped>
+.home-bg {
+    background: #fff !important;
+    min-height: 100vh;
+}
+v-container, v-row, v-col, v-card {
+    position: relative;
+    z-index: 2;
+}
+</style>
