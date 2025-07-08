@@ -9,8 +9,8 @@
         <v-tab class="black--text" to="/contact">Contact</v-tab>
         <v-tab class="black--text" to="/forms">Forms</v-tab>
         <v-spacer></v-spacer>
-        <v-tab class="black--text" to="/test">Test</v-tab>
-        <v-btn icon @click="drawer = !drawer" style="max-width: auto; height: auto; margin: 0 auto;">
+        <v-tab class="black--text" to="/test">ทดลอง</v-tab>
+        <v-btn class black icon @click="drawer = !drawer" style="max-width: auto; height: auto; margin: 0 auto;">
           <v-icon color="black">mdi-menu</v-icon>
         </v-btn>
       </v-tabs>
@@ -20,7 +20,7 @@
       right
       temporary
       app
-      style="max-width: 300px; height: auto; margin: 0 auto;"
+      style="max-width: auto; height: auto; margin: 0 auto;"
       width="300"
       fixed
       clipped
