@@ -1,0 +1,1 @@
+<template><h1>โนข้อมูล</h1></template>
