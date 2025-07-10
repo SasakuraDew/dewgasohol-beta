@@ -3,7 +3,7 @@
     <v-app-bar style=" height: auto; margin: auto;" app>
       <v-toolbar-title class="black--text" style="font-weight: bold; font-size: 20px; flex-grow: 1; white-space: normal; overflow: visible; text-overflow: unset; display: flex; align-items: center;">
         <img src="/1994408.jpg" alt="Logo" style="height: 40px; margin-right: 12px;">
-        <span style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL</span>
+        <span style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL **BATA**</span>
       </v-toolbar-title>
       <v-tabs tabs slider-color="black">
         <!-- <v-tab class="black--text" disabled style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL</v-tab> -->
@@ -12,9 +12,10 @@
         <v-tab class="black--text" to="/contact">Contact</v-tab>
         <v-tab class="black--text" to="/forms">Forms</v-tab>
         <v-spacer></v-spacer>
-        <v-tab class="black--text" to="/test">Test LAB</v-tab>
+        <v-tab class="black--text" to="/test">Test PAGE</v-tab>
+        <v-tab class="black--text" to="/">Sign UP</v-tab>
         <v-tab class="black--text" to="/login">Login Member</v-tab>
-        <v-tab class="black--text" to="/admin/login">Login Admin</v-tab>
+        <v-tab class="black--text" to="/admin/login_admin">Login Admin</v-tab>
       </v-tabs>
       <v-btn icon @click.stop="drawer = !drawer">
           <v-icon color="black">mdi-menu</v-icon>
