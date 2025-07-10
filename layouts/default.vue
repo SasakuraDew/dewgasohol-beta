@@ -1,8 +1,12 @@
 <template>
-  <v-app style="max-width: auto; height: auto; margin: 0 auto;">
-    <v-app-bar style="max-width: auto; height: auto; margin: auto;" app>
-      <v-tabs tabs background-color="white" slider-color="black">
-        <v-tab class="black--text" disabled style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL</v-tab>
+  <v-app style="height: auto; margin: 0 auto;">   
+    <v-app-bar style=" height: auto; margin: auto;" app>
+      <v-toolbar-title class="black--text" style="font-weight: bold; font-size: 20px; flex-grow: 1; white-space: normal; overflow: visible; text-overflow: unset; display: flex; align-items: center;">
+        <img src="/1994408.jpg" alt="Logo" style="height: 40px; margin-right: 12px;">
+        <span style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL</span>
+      </v-toolbar-title>
+      <v-tabs tabs slider-color="black">
+        <!-- <v-tab class="black--text" disabled style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL</v-tab> -->
         <v-tab class="black--text" to="/home">Home</v-tab>
         <v-tab class="black--text" to="/news">News</v-tab>
         <v-tab class="black--text" to="/contact">Contact</v-tab>
@@ -11,10 +15,10 @@
         <v-tab class="black--text" to="/test">Test LAB</v-tab>
         <v-tab class="black--text" to="/login">Login Member</v-tab>
         <v-tab class="black--text" to="/admin/login">Login Admin</v-tab>
-        <v-btn class black icon @click="drawer = !drawer" style="max-width: auto; height: auto; margin: 0 auto;">
+      </v-tabs>
+      <v-btn icon @click.stop="drawer = !drawer">
           <v-icon color="black">mdi-menu</v-icon>
         </v-btn>
-      </v-tabs>
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
