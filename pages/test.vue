@@ -1,14 +1,37 @@
 <template>
-  <v-container class="d-flex flex-column align-center justify-center" style="height: 80vh;">
-    <v-card width="500" elevation="8" class="pa-6">
-      <v-card-title class="justify-center">
-        <h1>Test LAB</h1>
-      </v-card-title>
-      <v-card-text class="text-center">
-        <p>
-          โอ้โห! นี่คือหน้า TEST PAGE ที่สุดจะคูล เหมือนใจเธอที่หวานละมุนละไม ใครผ่านมาไม่แวะถือว่าพลาดสุดๆ บอกเลยว่าถ้าอยากเท่ ต้องลองกดเทสต์ดูสักที เผื่อจะได้หัวใจใครกลับบ้านไปแบบไม่รู้ตัวนะจ๊ะ ;)
-        </p>
-      </v-card-text>
-    </v-card>
-  </v-container>
+  <v-row>
+    <v-col cols="auto">
+      <v-card width="200" height="200" class="overflow-auto">
+        <v-card-text>
+          <h3>Overflow Auto</h3>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis
+          facilis dicta esse molestias vero hic laudantium provident nisi eos
+          quasi iusto alias sequi, aut aliquid voluptatibus commodi! Minima, eum
+          voluptates?
+        </v-card-text>
+      </v-card>
+    </v-col>
+    <v-col cols="auto">
+      <v-card width="200" height="200" class="overflow-hidden">
+        <v-card-text>
+          <h3>Overflow Hidden</h3>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis
+          facilis dicta esse molestias vero hic laudantium provident nisi eos
+          quasi iusto alias sequi, aut aliquid voluptatibus commodi! Minima, eum
+          voluptates?
+        </v-card-text>
+      </v-card>
+    </v-col>
+    <v-col cols="auto">
+      <v-card width="200" height="200" class="overflow-visible">
+        <v-card-text>
+          <h3>Overflow visible</h3>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis
+          facilis dicta esse molestias vero hic laudantium provident nisi eos
+          quasi iusto alias sequi, aut aliquid voluptatibus commodi! Minima, eum
+          voluptates?
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>

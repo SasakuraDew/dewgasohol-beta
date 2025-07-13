@@ -35,12 +35,16 @@
       class="white">
       <v-list>
         <v-list-item>
+          <v-list-item-avatar>
+            <v-img src="/This is number 357.jpg"></v-img>
+          </v-list-item-avatar>
           <v-list-item-content class="black--text">
-            <v-list-item-title class="headline">เมนูเพิ่มเติม</v-list-item-title>
+            <v-list-item-title class="headline">เปิ้ลนาคร</v-list-item-title>
+            <v-list-item-subtitle>triggerbutbossfirst@outlook.com</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item link class="black--text">
+        <v-list-item link class="black--text" to="/member/profile">
           <v-list-item-icon><v-icon class="black--text">mdi-account</v-icon></v-list-item-icon>
           <v-list-item-title>โปรไฟล์</v-list-item-title>
         </v-list-item>
