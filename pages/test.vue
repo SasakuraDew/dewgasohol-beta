@@ -1,37 +1,123 @@
 <template>
-  <v-row>
-    <v-col cols="auto">
-      <v-card width="200" height="200" class="overflow-auto">
-        <v-card-text>
-          <h3>Overflow Auto</h3>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis
-          facilis dicta esse molestias vero hic laudantium provident nisi eos
-          quasi iusto alias sequi, aut aliquid voluptatibus commodi! Minima, eum
-          voluptates?
-        </v-card-text>
-      </v-card>
-    </v-col>
-    <v-col cols="auto">
-      <v-card width="200" height="200" class="overflow-hidden">
-        <v-card-text>
-          <h3>Overflow Hidden</h3>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis
-          facilis dicta esse molestias vero hic laudantium provident nisi eos
-          quasi iusto alias sequi, aut aliquid voluptatibus commodi! Minima, eum
-          voluptates?
-        </v-card-text>
-      </v-card>
-    </v-col>
-    <v-col cols="auto">
-      <v-card width="200" height="200" class="overflow-visible">
-        <v-card-text>
-          <h3>Overflow visible</h3>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis
-          facilis dicta esse molestias vero hic laudantium provident nisi eos
-          quasi iusto alias sequi, aut aliquid voluptatibus commodi! Minima, eum
-          voluptates?
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-card
+    class="mx-auto"
+    max-width="500"
+  >
+    <v-sheet class="pa-4 primary lighten-2">
+      <v-text-field
+        v-model="search"
+        label="Search Company Directory"
+        dark
+        flat
+        solo-inverted
+        hide-details
+        clearable
+        clear-icon="mdi-close-circle-outline"
+      ></v-text-field>
+      <v-checkbox
+        v-model="caseSensitive"
+        dark
+        hide-details
+        label="Case sensitive search"
+      ></v-checkbox>
+    </v-sheet>
+    <v-card-text>
+      <v-treeview
+        :items="items"
+        :search="search"
+        :filter="filter"
+        :open.sync="open"
+      >
+        <template v-slot:prepend="{ item }">
+          <v-icon
+            v-if="item.children"
+            v-text="`mdi-${item.id === 1 ? 'home-variant' : 'folder-network'}`"
+          ></v-icon>
+        </template>
+      </v-treeview>
+    </v-card-text>
+  </v-card>
 </template>
+
+<script>
+  export default {
+    data: () => ({
+      items: [
+        {
+          id: 1,
+          name: 'Vuetify Human Resources',
+          children: [
+            {
+              id: 2,
+              name: 'Core team',
+              children: [
+                {
+                  id: 201,
+                  name: 'John',
+                },
+                {
+                  id: 202,
+                  name: 'Kael',
+                },
+                {
+                  id: 203,
+                  name: 'Nekosaur',
+                },
+                {
+                  id: 204,
+                  name: 'Jacek',
+                },
+                {
+                  id: 205,
+                  name: 'Andrew',
+                },
+              ],
+            },
+            {
+              id: 3,
+              name: 'Administrators',
+              children: [
+                {
+                  id: 301,
+                  name: 'Mike',
+                },
+                {
+                  id: 302,
+                  name: 'Hunt',
+                },
+              ],
+            },
+            {
+              id: 4,
+              name: 'Contributors',
+              children: [
+                {
+                  id: 401,
+                  name: 'Phlow',
+                },
+                {
+                  id: 402,
+                  name: 'Brandon',
+                },
+                {
+                  id: 403,
+                  name: 'Sean',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      open: [1, 2],
+      search: null,
+      caseSensitive: false,
+    }),
+    computed: {
+      filter () {
+        return this.caseSensitive
+          ? (item, search, textKey) => item[textKey].indexOf(search) > -1
+          : undefined
+      },
+    },
+  }
+</script>

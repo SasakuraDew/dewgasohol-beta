@@ -2,9 +2,10 @@
   <v-app style="height: auto; margin: 0 auto;">   
     <v-app-bar style=" height: auto; margin: auto;" app>
       <v-toolbar-title class="black--text" style="font-weight: bold; font-size: 20px; flex-grow: 1; white-space: normal; overflow: visible; text-overflow: unset; display: flex; align-items: center;">
-        <img src="/1994408.jpg" alt="Logo" style="height: 40px; margin-right: 12px;">
-        <span style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL **BATA**</span>
+        <div class="tenor-gif-embed" data-postid="3210703131552940069" data-share-method="host" data-aspect-ratio="0.894309" data-width="40px" style="margin-right: 12px; display: inline-block; vertical-align: middle;"><a href="https://tenor.com/view/ina-memes-smirk-shrek-gif-3210703131552940069">Ina Memes Smirk GIF</a>from <a href="https://tenor.com/search/ina+memes-gifs">Ina Memes GIFs</a></div>
+        <span style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL **BETA**</span>
       </v-toolbar-title>
+      <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
       <v-tabs tabs slider-color="black">
         <!-- <v-tab class="black--text" disabled style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL</v-tab> -->
         <v-tab class="black--text" to="/home">Home</v-tab>
