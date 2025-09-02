@@ -12,6 +12,28 @@
         <v-tab class="black--text" to="/news">News</v-tab>
         <v-tab class="black--text" to="/contact">Contact</v-tab>
         <v-tab class="black--text" to="/forms">Forms</v-tab>
+          <v-menu offset-y transition="scroll-y-transition">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                text
+                class="black--text"
+                v-bind="attrs"
+                v-on="on"
+                style="padding: 16px; display: flex; align-items: center; justify-content: center; min-width: 100px; font-size: 14px; height: auto;"
+              >
+                More
+                <v-icon small style="margin-left:8px;">mdi-menu-down</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item link to="/arsenal-data/stations">
+                <v-list-item-title>Stations</v-list-item-title>
+              </v-list-item>
+              <v-list-item link to="/arsenal-data/users">
+                <v-list-item-title>Users</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         <v-spacer></v-spacer>
         <v-tab class="black--text" to="/test">Test PAGE</v-tab>
         <v-tab class="black--text" to="/">Sign UP</v-tab>

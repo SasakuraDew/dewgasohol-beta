@@ -14,19 +14,19 @@
                                 <v-list-item>
                                     <v-list-item-content>
                                         <v-list-item-title>SET Index</v-list-item-title>
-                                        <v-list-item-subtitle>1,600.25 (+5.12)</v-list-item-subtitle>
+                                        <v-list-item-subtitle>{{ stockData.setIndex }}</v-list-item-subtitle>
                                     </v-list-item-content>
                                 </v-list-item>
                                 <v-list-item>
                                     <v-list-item-content>
                                         <v-list-item-title>NASDAQ</v-list-item-title>
-                                        <v-list-item-subtitle>13,500.75 (+45.30)</v-list-item-subtitle>
+                                        <v-list-item-subtitle>{{ stockData.nasdaq }}</v-list-item-subtitle>
                                     </v-list-item-content>
                                 </v-list-item>
                                 <v-list-item>
                                     <v-list-item-content>
                                         <v-list-item-title>NIKKEI</v-list-item-title>
-                                        <v-list-item-subtitle>29,800.10 (-120.50)</v-list-item-subtitle>
+                                        <v-list-item-subtitle>{{ stockData.nikkei }}</v-list-item-subtitle>
                                     </v-list-item-content>
                                 </v-list-item>
                             </v-list>
@@ -103,8 +103,47 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-    name: 'HomePage'
+    name: 'HomePage',
+    data() {
+        return {
+            stockData: {
+                setIndex: 'กำลังโหลด...',
+                nasdaq: '13,500.75 (+45.30)',
+                nikkei: '29,800.10 (-120.50)'
+            },
+            intervalId: null,
+            apiKey:'023PY4D7PLBL210Q' // ใส่ API Key ของ Alpha Vantage ที่นี่
+        }
+    },
+    methods: {
+        async fetchStockData() {
+            try {
+                // Alpha Vantage API: GLOBAL_QUOTE for SET Index (symbol: SET.BK)
+                const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=SET.BK&apikey=${this.apiKey}`;
+                const setRes = await axios.get(url);
+                // Response ตัวอย่าง: { "Global Quote": { "05. price": "1600.25", "10. change percent": "0.32%" } }
+                const quote = setRes.data["Global Quote"];
+                if (quote && quote["05. price"]) {
+                    this.stockData.setIndex = `${quote["05. price"]} (${quote["10. change percent"]})`;
+                } else {
+                    this.stockData.setIndex = 'ไม่พบข้อมูล';
+                }
+            } catch (e) {
+                this.stockData.setIndex = 'ไม่สามารถโหลดข้อมูล';
+            }
+            // NASDAQ/NIKKEI: สามารถเพิ่ม API จริงได้
+        }
+    },
+    mounted() {
+        this.fetchStockData();
+        this.intervalId = setInterval(this.fetchStockData, 30000);
+    },
+    beforeDestroy() {
+        if (this.intervalId) clearInterval(this.intervalId);
+    }
 }
 </script>
 

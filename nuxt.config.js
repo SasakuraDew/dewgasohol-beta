@@ -30,6 +30,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: ['~/plugins/vuetify.js'
+    ,{ src: '~/plugins/axios.js', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -50,6 +51,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    baseURL: 'http://localhost/library_sheet_one/book_select.php'
   },
   /*
   ** vuetify module configuration
@@ -76,6 +78,7 @@ export default {
   ** Build configuration
   */
   build: {
+    venddor: ['axios', 'vue-axios'],
     /*
     ** You can extend webpack config here
     */
