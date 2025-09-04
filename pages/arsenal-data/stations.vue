@@ -24,6 +24,11 @@
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </template>
+        <template v-slot:item.edit="{ item }">
+          <v-btn icon color="blue" @click="openEditDialog(item)">
+            <v-icon>mdi-pencil</v-icon>
+          </v-btn>
+        </template>
       </v-data-table>
     </v-card>
     <!-- Dialog สำหรับเพิ่มสถานี -->
@@ -42,6 +47,25 @@
           <v-spacer></v-spacer>
           <v-btn text @click="dialog = false">ยกเลิก</v-btn>
           <v-btn color="primary" :disabled="!formValid" @click="addStation">บันทึก</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- Dialog สำหรับแก้ไขสถานี -->
+    <v-dialog v-model="editDialog" max-width="500px">
+      <v-card>
+        <v-card-title>แก้ไขข้อมูลสถานีบริการน้ำมัน</v-card-title>
+        <v-card-text>
+          <v-form ref="editForm" v-model="editFormValid">
+            <v-text-field v-model="editForm.name" label="ชื่อสถานี" :rules="[v => !!v || 'กรุณากรอกชื่อสถานี']" required></v-text-field>
+            <v-text-field v-model="editForm.location" label="ที่ตั้ง"></v-text-field>
+            <v-text-field v-model="editForm.fuel_type" label="ประเภทน้ำมัน"></v-text-field>
+            <v-text-field v-model="editForm.price" label="ราคา" type="number"></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="editDialog = false">ยกเลิก</v-btn>
+          <v-btn color="primary" :disabled="!editFormValid" @click="updateStation">บันทึก</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -65,6 +89,15 @@ export default {
         fuel_type: '',
         price: ''
       },
+      editDialog: false,
+      editFormValid: false,
+      editForm: {
+        id: '',
+        name: '',
+        location: '',
+        fuel_type: '',
+        price: ''
+      },
       snackbar: {
         show: false,
         text: '',
@@ -77,7 +110,8 @@ export default {
         { text: 'ประเภทน้ำมัน', value: 'fuel_type' },
         { text: 'ราคา', value: 'price' },
         { text: 'อัปเดตล่าสุด', value: 'updated_at' },
-        { text: 'ลบ', value: 'action', sortable: false }
+        { text: 'ลบ', value: 'action', sortable: false },
+        { text: 'แก้ไข', value: 'edit', sortable: false }
       ]
     }
   },
@@ -106,6 +140,27 @@ export default {
         }
         this.dialog = false;
         this.form = { name: '', location: '', fuel_type: '', price: '' };
+        this.fetchStations();
+      } catch (e) {
+        this.snackbar = { show: true, text: 'เกิดข้อผิดพลาดในการเชื่อมต่อ', color: 'error' };
+      }
+    },
+    openEditDialog(item) {
+      this.editForm = { ...item };
+      this.editDialog = true;
+    },
+    async updateStation() {
+      if (!this.$refs.editForm.validate()) return;
+      try {
+        await this.$axios.post('http://localhost/dewgasohol_beta/stations_update.php', {
+          id: this.editForm.id,
+          name: this.editForm.name,
+          location: this.editForm.location,
+          fuel_type: this.editForm.fuel_type,
+          price: this.editForm.price
+        });
+        this.snackbar = { show: true, text: 'แก้ไขข้อมูลสำเร็จ!', color: 'success' };
+        this.editDialog = false;
         this.fetchStations();
       } catch (e) {
         this.snackbar = { show: true, text: 'เกิดข้อผิดพลาดในการเชื่อมต่อ', color: 'error' };

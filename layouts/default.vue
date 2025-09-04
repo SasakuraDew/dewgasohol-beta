@@ -35,7 +35,7 @@
             </v-list>
           </v-menu>
         <v-spacer></v-spacer>
-        <v-tab class="black--text" to="/test">Test PAGE</v-tab>
+        <!-- <v-tab class="black--text" to="/test">Test PAGE</v-tab> -->
         <v-tab class="black--text" to="/">Sign UP</v-tab>
         <v-tab class="black--text" to="/login">Login Member</v-tab>
         <v-tab class="black--text" to="/admin/login_admin">Login Admin</v-tab>

@@ -8,19 +8,18 @@
           <div v-else>
             <div v-for="table in parsedTables" :key="table.name">
               <h3>{{ table.name }}</h3>
+              <div style="margin-bottom: 8px;">
+                <v-btn color="error" small @click="deleteTable(table)">ลบข้อมูลทั้งหมดในตารางนี้</v-btn>
+              </div>
               <v-simple-table>
                 <thead>
                   <tr>
                     <th v-for="col in table.columns" :key="col">{{ col }}</th>
-                    <th>ลบ</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="row in table.rows" :key="row[table.idField]">
                     <td v-for="col in table.columns" :key="col">{{ row[col] }}</td>
-                    <td>
-                      <v-btn color="error" small @click="deleteRow(table.name, row[table.idField], table.idField)">ลบ</v-btn>
-                    </td>
                   </tr>
                 </tbody>
               </v-simple-table>
@@ -93,11 +92,13 @@ export default {
         return tables;
       },
       async deleteRow(table, id, idField) {
-        if (!confirm('ต้องการลบข้อมูลนี้ใช่หรือไม่?')) return;
+        // ฟังก์ชันนี้ยังคงอยู่สำหรับการลบแถวเดี่ยว หากต้องการกลับไปใช้แบบเดิม
+      },
+      async deleteTable(table) {
+        if (!confirm('ต้องการลบข้อมูลทั้งหมดในตารางนี้ใช่หรือไม่?')) return;
         const formData = new FormData();
-        formData.append('table', table);
-        formData.append('id', id);
-        formData.append('id_field', idField);
+        formData.append('table', table.name);
+        formData.append('delete_all', '1');
         try {
           const res = await fetch('http://localhost/test/test_delete.php', {
             method: 'POST',
