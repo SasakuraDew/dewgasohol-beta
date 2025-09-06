@@ -31,7 +31,19 @@
         </template>
       </v-data-table>
     </v-card>
-    <!-- Dialog สำหรับเพิ่มสถานี -->
+  <!-- Dialog สำหรับเพิ่มสถานี -->
+    <!-- Dialog ยืนยันการลบ -->
+    <v-dialog v-model="confirmDeleteDialog" max-width="400px">
+      <v-card>
+        <v-card-title class="headline">ยืนยันการลบข้อมูล</v-card-title>
+        <v-card-text>คุณต้องการลบข้อมูลสถานีนี้ใช่หรือไม่?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="confirmDeleteDialog = false">ยกเลิก</v-btn>
+          <v-btn color="red" @click="confirmDelete">ลบ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
         <v-card-title>เพิ่มสถานีบริการน้ำมัน</v-card-title>
@@ -79,7 +91,9 @@
 export default {
   data() {
     return {
-      stations: [],
+  stations: [],
+  confirmDeleteDialog: false,
+  stationIdToDelete: null,
       loading: false,
       dialog: false,
       formValid: false,
@@ -166,9 +180,13 @@ export default {
         this.snackbar = { show: true, text: 'เกิดข้อผิดพลาดในการเชื่อมต่อ', color: 'error' };
       }
     },
-    async deleteStation(id) {
+    deleteStation(id) {
+      this.stationIdToDelete = id;
+      this.confirmDeleteDialog = true;
+    },
+    async confirmDelete() {
       try {
-        const res = await this.$axios.post('http://localhost/dewgasohol_beta/stations_delete.php', { id });
+        const res = await this.$axios.post('http://localhost/dewgasohol_beta/stations_delete.php', { id: this.stationIdToDelete });
         if (res.data.success) {
           this.snackbar = { show: true, text: 'ลบข้อมูลสำเร็จ!', color: 'success' };
           this.fetchStations();
@@ -178,6 +196,8 @@ export default {
       } catch (e) {
         this.snackbar = { show: true, text: 'เกิดข้อผิดพลาดในการเชื่อมต่อ', color: 'error' };
       }
+      this.confirmDeleteDialog = false;
+      this.stationIdToDelete = null;
     }
   }
 }

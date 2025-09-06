@@ -1,6 +1,6 @@
 <template>
   <v-app style="height: auto; margin: 0 auto;">   
-    <v-app-bar style=" height: auto; margin: auto;" app>
+  <v-app-bar style="height: auto; margin: auto; background-color: rgba(255,255,255,0.2); backdrop-filter: blur(2.3px); -webkit-backdrop-filter: blur(2px);" app>
       <v-toolbar-title class="black--text" style="font-weight: bold; font-size: 20px; flex-grow: 1; white-space: normal; overflow: visible; text-overflow: unset; display: flex; align-items: center;">
         <div class="tenor-gif-embed" data-postid="3210703131552940069" data-share-method="host" data-aspect-ratio="0.894309" data-width="40px" style="margin-right: 12px; display: inline-block; vertical-align: middle;"><a href="https://tenor.com/view/ina-memes-smirk-shrek-gif-3210703131552940069">Ina Memes Smirk GIF</a>from <a href="https://tenor.com/search/ina+memes-gifs">Ina Memes GIFs</a></div>
   <span style="font-weight:bold; font-size:20px; min-width:100px; text-align:center; display:inline-flex; align-items:center; justify-content:center; width:100%;">DEWGASOHOL <span style="margin-left:6px;">**BETA**</span></span>
@@ -31,6 +31,12 @@
               </v-list-item>
               <v-list-item link to="/arsenal-data/users">
                 <v-list-item-title>Users</v-list-item-title>
+              </v-list-item>
+              <v-list-item link to="/wokwi_iot/sheet7_2">
+                <v-list-item-title>Wokwi Get DHT22</v-list-item-title>
+              </v-list-item>
+              <v-list-item link to="/wokwi_iot/iot_test">
+                <v-list-item-title>test API</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
