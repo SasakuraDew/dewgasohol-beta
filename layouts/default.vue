@@ -6,12 +6,12 @@
   <span style="font-weight:bold; font-size:20px; min-width:100px; text-align:center; display:inline-flex; align-items:center; justify-content:center; width:100%;">DEWGASOHOL <span style="margin-left:6px;">**BETA**</span></span>
       </v-toolbar-title>
       <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
-      <v-tabs tabs slider-color="black">
+  <v-tabs tabs slider-color="rgba(255, 255, 255, 0)">
         <!-- <v-tab class="black--text" disabled style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL</v-tab> -->
         <v-tab class="black--text" to="/">Home</v-tab>
         <v-tab class="black--text" to="/news">News</v-tab>
         <v-tab class="black--text" to="/contact">Contact</v-tab>
-        <v-tab class="black--text" to="/forms">Forms</v-tab>
+        <!-- <v-tab class="black--text" to="/forms">Forms</v-tab> -->
         <!-- <v-tab class="black--text" to="/about">about</v-tab> -->
           <v-menu offset-y transition="scroll-y-transition">
             <template v-slot:activator="{ on, attrs }">
@@ -44,8 +44,11 @@
         <v-spacer></v-spacer>
         <!-- <v-tab class="black--text" to="/test">Test PAGE</v-tab> -->
         <!-- <v-tab class="black--text" to="/">Sign UP</v-tab> -->
-        <v-tab class="black--text" to="/login">Login Member</v-tab>
-        <v-tab class="black--text" to="/admin/login_admin">Login Admin</v-tab>
+        <!-- <v-tab class="black--text" to="/login">Login Member</v-tab> -->
+        <v-tab class="black--text" to="/deep_link/user_signin">
+          <v-icon left class="mr-1" style="font-size: 28px;">mdi-account-circle</v-icon>
+          Sign IN
+        </v-tab>
       </v-tabs>
       <v-btn icon @click.stop="drawer = !drawer">
           <v-icon color="black">mdi-menu</v-icon>
