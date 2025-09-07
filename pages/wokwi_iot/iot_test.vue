@@ -258,8 +258,8 @@ export default {
 .content-section {
   position: relative; 
   z-index: 2; 
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .hero-section {
@@ -280,7 +280,7 @@ export default {
 
 
 .card-transparent {
-  background-color: rgba(0, 0, 0, 0.5) !important;
+  background-color: rgba(0, 0, 0, 0.589) !important;
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }
