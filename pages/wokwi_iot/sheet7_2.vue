@@ -1,16 +1,12 @@
 <template>
-  <v-app>
-  <!-- Banner moved to center above devices -->
-    <v-main style="background-color: #f5f5f5; min-height: 100vh;">
-   
-      <v-container fluid class="d-flex flex-column align-center fill-height" style="min-height: 100vh;">
-        <!-- <div class="wokwi-banner-center">Wokwi Get DHT22</div> -->
-        <div class="d-flex flex-row justify-center align-center w-100">
+  <div class="parallax-container">
+    <div class="parallax-background"></div>
+    <div class="content-section">
+      <div class="moving-row">
         <v-card
-          class="pa-6 d-flex flex-column align-center mx-4"
+          class="pa-6 d-flex flex-column align-center mx-4 moving-card"
           max-width="350"
           outlined
-          style="border-radius: 18px; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);"
         >
           <v-card-title class="justify-center align-center flex-column" style="width: 100%;">
             <span class="text-h5 font-weight-bold">DHT22 Client</span>
@@ -27,10 +23,9 @@
           </v-card-text>
         </v-card>
         <v-card
-          class="pa-6 d-flex flex-column align-center mx-4"
+          class="pa-6 d-flex flex-column align-center mx-4 moving-card"
           max-width="350"
           outlined
-          style="border-radius: 18px; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);"
         >
           <v-card-title class="justify-center align-center flex-column" style="width: 100%;">
             <span class="text-h5 font-weight-bold">DHT22 Wokwi</span>
@@ -46,10 +41,9 @@
             </div>
           </v-card-text>
         </v-card>
-        </div>
-      </v-container>
-    </v-main>
-  </v-app>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -80,32 +74,40 @@ export default {
 </script>
 
 <style scoped>
-.v-main {
+.parallax-container {
+  position: relative;
+  width: 100%;
   min-height: 100vh;
 }
-.v-container {
+.parallax-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
+.content-section {
+  position: relative;
+  z-index: 2;
   min-height: 100vh;
-}
-.v-card {
-  /* เพิ่มเงาและความโค้งมนให้ดูเหมือน boot logo windows 10 */
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-  border-radius: 18px;
-}
-/* กรอบข้อความตรงกลางด้านบน */
-.wokwi-banner-center {
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.moving-row {
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-bottom: 32px;
-  margin-top: 32px;
-  background: #fff;
-  border: 2px solid #1976d2;
-  color: #1976d2;
-  border-radius: 8px;
-  padding: 8px 32px;
-  font-weight: bold;
-  font-size: 1.2rem;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
-  z-index: 10;
+  width: 100vw;
+}
+.moving-card {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.95);
 }
 </style>

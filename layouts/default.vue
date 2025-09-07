@@ -12,6 +12,7 @@
         <v-tab class="black--text" to="/news">News</v-tab>
         <v-tab class="black--text" to="/contact">Contact</v-tab>
         <v-tab class="black--text" to="/forms">Forms</v-tab>
+        <!-- <v-tab class="black--text" to="/about">about</v-tab> -->
           <v-menu offset-y transition="scroll-y-transition">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -60,10 +61,9 @@
       fixed
       clipped
       disable-resize-watcher
-      :style="{ backgroundColor: 'white' }"
-      class="white">
-      <v-list>
-        <v-list-item>
+      class="white drawer-blur">
+  <v-list class="drawer-blur">
+  <v-list-item class="drawer-blur">
           <v-list-item-avatar>
             <v-img src="/This is number 357.jpg"></v-img>
           </v-list-item-avatar>
@@ -73,15 +73,15 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item link class="black--text" to="/member/profile">
+  <v-list-item link class="black--text drawer-blur" to="/member/profile">
           <v-list-item-icon><v-icon class="black--text">mdi-account</v-icon></v-list-item-icon>
           <v-list-item-title>โปรไฟล์</v-list-item-title>
         </v-list-item>
-        <v-list-item link class="black--text">
+  <v-list-item link class="black--text drawer-blur">
           <v-list-item-icon><v-icon class="black--text">mdi-cog</v-icon></v-list-item-icon>
           <v-list-item-title>ตั้งค่า</v-list-item-title>
         </v-list-item>
-        <v-list-item link class="black--text">
+  <v-list-item link class="black--text drawer-blur">
           <v-list-item-icon><v-icon class="black--text">mdi-logout</v-icon></v-list-item-icon>
           <v-list-item-title>ออกจากระบบ</v-list-item-title>
         </v-list-item>
@@ -104,4 +104,10 @@ export default {
 </script>
 
 <style>
+/* Make everything in the navigation drawer transparent and blurred */
+.drawer-blur {
+  background-color: rgba(255,255,255,0.2) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+}
 </style>
