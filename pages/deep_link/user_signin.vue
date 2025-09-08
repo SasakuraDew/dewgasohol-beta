@@ -17,14 +17,26 @@
                 <div class="signin-content">
                     <div class="signin-header">
                         <h2>Sign in</h2>
-                        <div class="signin-newuser">New user? <a href="#">Create an account</a></div>
+                        <div class="signin-newuser">New user? <nuxt-link to="/deep_link/user_create_an_account">Create an account</nuxt-link></div>
                     </div>
 
                     <label class="signin-label" for="email-input">Email address</label>
-                    <input id="email-input" class="signin-input" type="email" />
+                    <input id="email-input" class="signin-input" type="email" placeholder="Enter your email" />
 
-                    <label class="signin-label" for="email-input">Password</label>
-                    <input id="email-input" class="signin-input" type="email" />
+                    <label class="signin-label" for="password-input">Password</label>
+                    <input id="password-input" class="signin-input" type="password" placeholder="Enter your password" />
+
+                    <!-- เพิ่มเนื้อหาเพื่อให้ยาวขึ้นสำหรับทดสอบการ scroll -->
+                    <div class="signin-or"><span>Or</span></div>
+
+                    <button class="social-btn google-btn">
+                        <img class="social-icon" src="https://www.vectorlogo.zone/logos/google/google-icon.svg" alt="Google"/>
+                        <span>Continue with Google</span>
+                    </button>
+                     <button class="social-btn facebook-btn">
+                        <img class="social-icon" src="https://www.vectorlogo.zone/logos/facebook/facebook-icon.svg" alt="Facebook"/>
+                        <span>Continue with Facebook</span>
+                    </button>
 
                     <button class="signin-continue">Continue</button>
 
@@ -36,10 +48,6 @@
 
         <footer class="signin-footer">
             <span>Copyright © 2025 DEWGASOHOL. All rights reserved.</span>
-            <a href="#">Terms of Use</a>
-            <a href="#">Cookie preferences</a>
-            <a href="#">Privacy</a>
-            <a href="#">Do not sell or share my personal information</a>
         </footer>
 
         <button class="help-button">
@@ -61,18 +69,18 @@
     background: url('https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1500&q=80') no-repeat center center;
     background-size: cover;
     z-index: 0;
-    overflow-y: auto;
+    overflow-y: auto; /* ยังคงจำเป็นสำหรับหน้าจอเล็กมากๆ ที่ทั้งหน้าต้องเลื่อน */
     overflow-x: hidden;
 }
 
 /* --- Layout --- */
 .signin-layout {
     display: flex;
-    justify-content: flex-end; /* [แก้ไข] ดันการ์ดไปทางขวาเป็นหลัก */
-    align-items: flex-start;
-    min-height: 100vh; /* [แก้ไข] ใช้ min-height เพื่อความยืดหยุ่น */
+    justify-content: flex-end;
+    align-items: center; /* จัดให้อยู่กลางแนวตั้ง */
+    min-height: 100vh;
     width: 100%;
-    padding: 2rem; /* [เพิ่ม] เพิ่ม padding รอบๆ */
+    padding: 2rem;
     box-sizing: border-box;
     position: relative;
     z-index: 2;
@@ -81,8 +89,8 @@
 /* --- Logo (Left Side) --- */
 .signin-left {
     position: absolute;
-    bottom: 60px; /* [แก้ไข] ยึดตำแหน่งด้านล่างคงที่ */
-    left: 60px;   /* [แก้ไข] ยึดตำแหน่งด้านซ้ายคงที่ */
+    bottom: 60px;
+    left: 60px;
 }
 .signin-adobe-logo {
     display: flex;
@@ -97,7 +105,7 @@
     color: #fff;
     font-weight: bold;
     font-size: 1.5rem;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.3); /* [เพิ่ม] ใส่เงาให้ข้อความพื้นหลัง */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 .signin-adobe-desc {
     font-size: 1rem;
@@ -112,23 +120,13 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     max-width: 420px;
     width: 100%;
-    /* [แก้ไข] ใช้ margin ที่ยืดหยุ่นและเหมาะสม */
-    margin: 8vh 5vw 0 0; 
+    margin: 0 5vw 0 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     z-index: 3;
-}
-
-.signin-info-bar {
-    background: #1473e6;
-    color: #fff;
-    font-size: 0.95rem;
-    padding: 1rem 1.2rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    /* --- [การแก้ไขหลัก] --- */
+    max-height: 85vh; /* 1. กำหนดความสูงสูงสุดไม่ให้เกิน 85% ของความสูงหน้าจอ */
+    overflow-y: auto; /* 2. เพิ่ม scrollbar อัตโนมัติเมื่อเนื้อหาเกินความสูงที่กำหนด */
 }
 
 .signin-content {
@@ -165,6 +163,7 @@
     margin-bottom: 0.3rem;
     font-weight: bold;
     color: #555;
+    text-align: left;
 }
 .signin-input {
     border: 1px solid #c0c0c0;
@@ -189,6 +188,7 @@
     font-weight: 600;
     cursor: pointer;
     align-self: flex-end;
+    margin-top: 1.5rem; /* เพิ่มระยะห่างด้านบน */
     transition: background 0.2s;
 }
 .signin-continue:hover {
@@ -240,8 +240,6 @@
     position: absolute;
     left: 1.2rem;
 }
-.facebook-btn { color: #1877f2; }
-.line-btn { color: #00c300; }
 
 /* --- Bottom Links --- */
 .signin-more-options, .signin-help {
@@ -276,13 +274,6 @@
     z-index: 2;
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
-.signin-footer a {
-    color: #fff;
-    text-decoration: none;
-}
-.signin-footer a:hover {
-    text-decoration: underline;
-}
 
 /* --- Help Button --- */
 .help-button {
@@ -303,49 +294,36 @@
     z-index: 4;
 }
 
-/* --- [ใหม่] Responsive Design --- */
-
-/* สำหรับจอขนาดเล็กถึงกลาง (เช่น Laptop 1366px) */
-@media (max-width: 1400px) {
-    .signin-card {
-        margin-top: 10vh;
-        margin-right: 4vw;
-    }
-    .signin-left {
-        left: 4vw;
-        bottom: 40px;
-    }
-}
-
-
-/* สำหรับจอ Tablet แนวตั้ง และจอที่เล็กกว่า */
+/* --- Responsive Design --- */
 @media (max-width: 992px) {
     .signin-layout {
-        flex-direction: column; /* เปลี่ยนเป็นแนวตั้ง */
-        justify-content: flex-start;
-        align-items: center; /* จัดทุกอย่างไว้ตรงกลาง */
+        flex-direction: column;
+        justify-content: flex-start; /* เปลี่ยนให้เนื้อหาเริ่มจากด้านบน */
+        align-items: center;
         padding: 1rem;
     }
     .signin-left {
-        position: static; /* ยกเลิกการยึดตำแหน่ง */
+        position: static;
         margin-top: 5vh;
         margin-bottom: 2rem;
-        order: 1; /* ให้โลโก้อยู่ก่อน */
+        order: 1;
     }
     .signin-card {
         margin: 0;
         width: 100%;
-        max-width: 480px; /* จำกัดความกว้างสูงสุด */
-        order: 2; /* ให้การ์ดอยู่ทีหลัง */
+        max-width: 480px;
+        order: 2;
+        max-height: none; /* [ยกเลิก] เมื่อหน้าจอเล็ก ให้ทั้งหน้า scroll แทน */
+        overflow-y: visible; /* [ยกเลิก] */
     }
     .signin-footer {
         position: relative; /* ทำให้ footer เลื่อนตามเนื้อหา */
         margin-top: 2rem;
         padding-bottom: 2rem;
+        order: 3; /* ให้ footer อยู่ล่างสุดเสมอ */
     }
 }
 
-/* สำหรับจอมือถือ */
 @media (max-width: 600px) {
     .signin-layout {
         padding: 0;
@@ -374,3 +352,22 @@
     }
 }
 </style>
+```
+
+### การเปลี่ยนแปลงที่สำคัญ:
+
+1.  **ทำให้ Card Scroll ได้ (สำหรับจอใหญ่):**
+    * ใน `CSS` ของคลาส `.signin-card` ผมได้เพิ่ม 2 บรรทัดนี้:
+        ```css
+        max-height: 85vh;
+        overflow-y: auto;
+        ```
+    * `max-height: 85vh;`: เป็นการบอกว่า "ความสูงของการ์ดนี้ห้ามเกิน 85% ของความสูงหน้าจอ" (`vh` คือ viewport height) ซึ่งจะช่วยป้องกันไม่ให้การ์ดยาวเกินไปจนล้นหน้าจอในแนวตั้ง
+    * `overflow-y: auto;`: คือหัวใจหลัก มันจะบอกเบราว์เซอร์ว่า "ถ้าเนื้อหาข้างในมันสูงกว่า `max-height` ที่กำหนดไว้ ให้แสดงแถบเลื่อน (scrollbar) ด้านข้างโดยอัตโนมัติ" ถ้าเนื้อหาพอดี ก็จะไม่แสดง scrollbar
+
+2.  **ยกเลิกการ Scroll ของ Card (สำหรับจอเล็ก):**
+    * ใน `@media (max-width: 992px)` ซึ่งเป็นสไตล์สำหรับ Tablet และมือถือ ผมได้เพิ่ม:
+        ```css
+        max-height: none;
+        overflow-y: visible;
+        
