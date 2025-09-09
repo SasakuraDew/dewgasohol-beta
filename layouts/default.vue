@@ -45,9 +45,21 @@
         <!-- <v-tab class="black--text" to="/test">Test PAGE</v-tab> -->
         <!-- <v-tab class="black--text" to="/">Sign UP</v-tab> -->
         <!-- <v-tab class="black--text" to="/login">Login Member</v-tab> -->
-        <v-tab class="black--text" to="/deep_link/user_signin">
+        <v-tab
+          v-if="!isAuthenticated"
+          class="black--text"
+          to="/deep_link/user_signin"
+        >
           <v-icon left class="mr-1" style="font-size: 28px;">mdi-account-circle</v-icon>
           Sign IN
+        </v-tab>
+        <v-tab
+          v-else
+          class="black--text"
+          to="/member/profile"
+        >
+          <v-icon left class="mr-1" style="font-size: 28px;">mdi-account-circle</v-icon>
+          {{ loggedInUser.displayName }}
         </v-tab>
       </v-tabs>
       <v-btn icon @click.stop="drawer = !drawer">
@@ -66,13 +78,13 @@
       disable-resize-watcher
       class="white drawer-blur">
   <v-list class="drawer-blur">
-  <v-list-item class="drawer-blur">
+  <v-list-item class="drawer-blur" v-if="isAuthenticated">
           <v-list-item-avatar>
             <v-img src="/This is number 357.jpg"></v-img>
           </v-list-item-avatar>
           <v-list-item-content class="black--text">
-            <v-list-item-title class="headline">เปิ้ลนาคร</v-list-item-title>
-            <v-list-item-subtitle>triggerbutbossfirst@outlook.com</v-list-item-subtitle>
+            <v-list-item-title class="headline">{{ loggedInUser.displayName }}</v-list-item-title>
+            <v-list-item-subtitle>{{ loggedInUser.email }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
@@ -84,7 +96,7 @@
           <v-list-item-icon><v-icon class="black--text">mdi-cog</v-icon></v-list-item-icon>
           <v-list-item-title>ตั้งค่า</v-list-item-title>
         </v-list-item>
-  <v-list-item link class="black--text drawer-blur">
+  <v-list-item v-if="isAuthenticated" link class="black--text drawer-blur" @click="logout">
           <v-list-item-icon><v-icon class="black--text">mdi-logout</v-icon></v-list-item-icon>
           <v-list-item-title>ออกจากระบบ</v-list-item-title>
         </v-list-item>
@@ -97,10 +109,24 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
-      drawer: false
+      drawer: false,
+    }
+  },
+  computed: {
+    ...mapGetters('auth', ['isAuthenticated', 'loggedInUser'])
+  },
+  created() {
+    this.$store.dispatch('auth/tryAutoLogin')
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('auth/logout');
+      this.$router.push('/');
     }
   }
 }

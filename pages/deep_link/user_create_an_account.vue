@@ -31,34 +31,39 @@
 
 
                     <label class="signin-label" for="username-input">Username</label>
-                    <input id="username-input" class="signin-input" type="text" placeholder="Enter your username" />
+                    <input id="username-input" class="signin-input" type="text" placeholder="Enter your username" v-model="username" />
 
                     <label class="signin-label" for="fullname-input">Full Name</label>
-                    <input id="fullname-input" class="signin-input" type="text" placeholder="Enter your full name" />
+                    <input id="fullname-input" class="signin-input" type="text" placeholder="Enter your full name" v-model="fullname" />
 
                     <label class="signin-label" for="email-input">Email address</label>
-                    <input id="email-input" class="signin-input" type="email" placeholder="Enter your email" />
+                    <input id="email-input" class="signin-input" type="email" placeholder="Enter your email" v-model="email" />
                     <label class="signin-label" for="password-input">Password</label>
                     <!-- [ปรับปรุง] เพิ่ม Container สำหรับช่อง Password และปุ่ม Show/Hide -->
                     <div class="password-container">
-                        <input id="password-input" class="signin-input" type="password" placeholder="Create a password" />
-                        <button class="toggle-password">
-                            <!-- ไอคอนรูปตา (สามารถเปลี่ยนเป็น SVG อื่นๆ ได้) -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                        </button>
+                                                <input
+                                                    id="password-input"
+                                                    class="signin-input"
+                                                    :type="showPassword ? 'text' : 'password'"
+                                                    placeholder="Create a password"
+                                                    v-model="password"
+                                                />
+                                                <button class="toggle-password" type="button" @click="showPassword = !showPassword">
+                                                        <svg v-if="showPassword" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                        <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.06 10.06 0 0 1 12 20c-7 0-11-8-11-8a19.77 19.77 0 0 1 5.06-6.94M1 1l22 22"/><path d="M9.53 9.53A3 3 0 0 0 12 15a3 3 0 0 0 2.47-5.47"/></svg>
+                                                </button>
                     </div>
 
                     <!-- [ใหม่] เพิ่มแถบวัดความปลอดภัยของรหัสผ่าน -->
-                    <div class="password-strength">
+                    <!-- <div class="password-strength">
                         <div class="strength-bar weak"></div>
                         <div class="strength-bar medium"></div>
                         <div class="strength-bar strong"></div>
-                        <span class="strength-text">Weak password</span>
-                    </div>
+                    </div> -->
 
                      <!-- [ใหม่] เพิ่ม Checkbox ยอมรับเงื่อนไข -->
                     <div class="terms-container">
-                        <input type="checkbox" id="terms-checkbox" class="terms-checkbox">
+                        <input type="checkbox" id="terms-checkbox" class="terms-checkbox" v-model="termsAccepted">
                         <label for="terms-checkbox" class="terms-label">
                             By creating an account, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.
                         </label>
@@ -66,7 +71,8 @@
 
 
                     <!-- [ปรับปรุง] ปุ่มจะถูก disable จนกว่าฟอร์มจะถูกต้อง -->
-                    <button class="signin-continue" disabled>Create account</button>
+                    <button class="signin-continue" :disabled="!fullname || !email || !password || !termsAccepted || loading" @click="createAccount">{{ loading ? 'กำลังสมัคร...' : 'Create account' }}</button>
+                    <div v-if="message" style="color:red; margin-top:10px">{{ message }}</div>
 
                 </div>
             </div>
@@ -388,3 +394,52 @@
     .help-button { bottom: 10px; right: 10px; }
 }
 </style>
+
+<script>
+export default {
+    data() {
+        return {
+            username: '',
+            fullname: '',
+            email: '',
+            password: '',
+            showPassword: false,
+            termsAccepted: false,
+            loading: false,
+            message: ''
+        }
+    },
+    methods: {
+        async createAccount() {
+            if (!this.username || !this.fullname || !this.email || !this.password || !this.termsAccepted) {
+                this.message = 'กรุณากรอกข้อมูลให้ครบถ้วนและยอมรับเงื่อนไข';
+                return;
+            }
+            this.loading = true;
+            this.message = '';
+            try {
+                const res = await fetch('http://localhost/dewgasohol_beta/deeplink_insert.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        fullname: this.fullname,
+                        display_name: this.username,
+                        email: this.email,
+                        password: this.password
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Your account is ready.');
+                    this.$router.push('/deep_link/user_signin');
+                } else {
+                    this.message = data.error || 'เกิดข้อผิดพลาด';
+                }
+            } catch (e) {
+                this.message = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์';
+            }
+            this.loading = false;
+        }
+    }
+}
+</script>

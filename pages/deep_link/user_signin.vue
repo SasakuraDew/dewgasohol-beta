@@ -21,24 +21,25 @@
                     </div>
 
                     <label class="signin-label" for="email-input">Email address</label>
-                    <input id="email-input" class="signin-input" type="email" placeholder="Enter your email" />
+                    <input id="email-input" class="signin-input" type="email" placeholder="Enter your email" v-model="email" />
 
                     <label class="signin-label" for="password-input">Password</label>
-                    <input id="password-input" class="signin-input" type="password" placeholder="Enter your password" />
+                    <input id="password-input" class="signin-input" type="password" placeholder="Enter your password" v-model="password" @keyup.enter="signIn"/>
 
-                    <!-- เพิ่มเนื้อหาเพื่อให้ยาวขึ้นสำหรับทดสอบการ scroll -->
+                    <div v-if="errorMsg" style="color:red; margin-bottom:10px">{{ errorMsg }}</div>
+
+                    <button class="signin-continue" @click="signIn">Continue</button>
+
                     <div class="signin-or"><span>Or</span></div>
 
                     <button class="social-btn google-btn">
                         <img class="social-icon" src="https://www.vectorlogo.zone/logos/google/google-icon.svg" alt="Google"/>
                         <span>Continue with Google</span>
                     </button>
-                     <button class="social-btn facebook-btn">
+                    <button class="social-btn facebook-btn">
                         <img class="social-icon" src="https://www.vectorlogo.zone/logos/facebook/facebook-icon.svg" alt="Facebook"/>
                         <span>Continue with Facebook</span>
                     </button>
-
-                    <button class="signin-continue">Continue</button>
 
                     <a class="signin-more-options" href="#">More sign-in options</a>
                     <a class="signin-help" href="#">Get help signing in</a>
@@ -55,6 +56,36 @@
         </button>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            email: '',
+            password: '',
+            errorMsg: ''
+        }
+    },
+    methods: {
+        async signIn() {
+            this.errorMsg = '';
+            if (!this.email || !this.password) {
+                this.errorMsg = 'Please enter email and password';
+                return;
+            }
+            try {
+                await this.$store.dispatch('auth/login', { 
+                    email: this.email, 
+                    password: this.password 
+                });
+                this.$router.push('/member/profile');
+            } catch (error) {
+                this.errorMsg = error.message || 'Invalid email or password';
+            }
+        }
+    }
+}
+</script>
 
 <style scoped>
 /* --- Base and Background --- */
@@ -352,22 +383,3 @@
     }
 }
 </style>
-```
-
-### การเปลี่ยนแปลงที่สำคัญ:
-
-1.  **ทำให้ Card Scroll ได้ (สำหรับจอใหญ่):**
-    * ใน `CSS` ของคลาส `.signin-card` ผมได้เพิ่ม 2 บรรทัดนี้:
-        ```css
-        max-height: 85vh;
-        overflow-y: auto;
-        ```
-    * `max-height: 85vh;`: เป็นการบอกว่า "ความสูงของการ์ดนี้ห้ามเกิน 85% ของความสูงหน้าจอ" (`vh` คือ viewport height) ซึ่งจะช่วยป้องกันไม่ให้การ์ดยาวเกินไปจนล้นหน้าจอในแนวตั้ง
-    * `overflow-y: auto;`: คือหัวใจหลัก มันจะบอกเบราว์เซอร์ว่า "ถ้าเนื้อหาข้างในมันสูงกว่า `max-height` ที่กำหนดไว้ ให้แสดงแถบเลื่อน (scrollbar) ด้านข้างโดยอัตโนมัติ" ถ้าเนื้อหาพอดี ก็จะไม่แสดง scrollbar
-
-2.  **ยกเลิกการ Scroll ของ Card (สำหรับจอเล็ก):**
-    * ใน `@media (max-width: 992px)` ซึ่งเป็นสไตล์สำหรับ Tablet และมือถือ ผมได้เพิ่ม:
-        ```css
-        max-height: none;
-        overflow-y: visible;
-        
