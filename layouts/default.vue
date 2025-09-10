@@ -11,6 +11,7 @@
         <v-tab class="black--text" to="/">Home</v-tab>
         <v-tab class="black--text" to="/news">News</v-tab>
         <v-tab class="black--text" to="/contact">Contact</v-tab>
+        <!-- <v-tab class="black--text" to="/security/blank">Blog</v-tab> -->
         <!-- <v-tab class="black--text" to="/admin/console">test</v-tab> -->
         <!-- <v-tab class="black--text" to="/forms">Forms</v-tab> -->
         <!-- <v-tab class="black--text" to="/about">about</v-tab> -->

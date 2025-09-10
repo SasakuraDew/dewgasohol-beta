@@ -100,6 +100,7 @@ const SensorLineChart = {
 }
 
 export default {
+  middleware: 'auth',
   components: {
     SensorLineChart
   },
