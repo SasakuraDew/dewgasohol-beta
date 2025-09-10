@@ -2,8 +2,8 @@
   <v-app style="height: auto; margin: 0 auto;">   
   <v-app-bar style="height: auto; margin: auto; background-color: rgba(255,255,255,0.2); backdrop-filter: blur(2.3px); -webkit-backdrop-filter: blur(2px);" app>
       <v-toolbar-title class="black--text" style="font-weight: bold; font-size: 20px; flex-grow: 1; white-space: normal; overflow: visible; text-overflow: unset; display: flex; align-items: center;">
-        <div class="tenor-gif-embed" data-postid="3210703131552940069" data-share-method="host" data-aspect-ratio="0.894309" data-width="40px" style="margin-right: 12px; display: inline-block; vertical-align: middle;"><a href="https://tenor.com/view/ina-memes-smirk-shrek-gif-3210703131552940069">Ina Memes Smirk GIF</a>from <a href="https://tenor.com/search/ina+memes-gifs">Ina Memes GIFs</a></div>
-  <span style="font-weight:bold; font-size:20px; min-width:100px; text-align:center; display:inline-flex; align-items:center; justify-content:center; width:100%;">DEWGASOHOL <span style="margin-left:6px;">**BETA**</span></span>
+  <img src="/Image 10_12_02.png" alt="Dewgasohol Logo" style="height:40px; width:auto; margin-right:12px; display:inline-block; vertical-align:middle; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08);" />
+  <span style="font-weight:bold; font-size:20px; min-width:100px; text-align:center; display:inline-flex; align-items:center; justify-content:center; width:100%;">DEWGASOHOL</span>
       </v-toolbar-title>
       <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
   <v-tabs tabs slider-color="rgba(255, 255, 255, 0)">
@@ -11,9 +11,11 @@
         <v-tab class="black--text" to="/">Home</v-tab>
         <v-tab class="black--text" to="/news">News</v-tab>
         <v-tab class="black--text" to="/contact">Contact</v-tab>
+        <!-- <v-tab class="black--text" to="/admin/console">test</v-tab> -->
         <!-- <v-tab class="black--text" to="/forms">Forms</v-tab> -->
         <!-- <v-tab class="black--text" to="/about">about</v-tab> -->
-          <v-menu offset-y transition="scroll-y-transition">
+         <v-spacer></v-spacer>
+          <v-menu v-if="isAdmin" offset-y transition="scroll-y-transition">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 text
@@ -22,7 +24,8 @@
                 v-on="on"
                 style="padding: 16px; display: flex; align-items: center; justify-content: center; min-width: 100px; font-size: 14px; height: auto;"
               >
-                More
+                <v-icon left style="margin-right:4px; font-size: 24px;">mdi-wrench</v-icon>
+                Console
                 <v-icon small style="margin-left:8px;">mdi-menu-down</v-icon>
               </v-btn>
             </template>
@@ -30,7 +33,7 @@
               <v-list-item link to="/arsenal-data/stations">
                 <v-list-item-title>Stations</v-list-item-title>
               </v-list-item>
-              <v-list-item link to="/arsenal-data/users">
+              <v-list-item link to="/deep_link/users">
                 <v-list-item-title>Users</v-list-item-title>
               </v-list-item>
               <v-list-item link to="/wokwi_iot/sheet7_2">
@@ -41,7 +44,7 @@
               </v-list-item>
             </v-list>
           </v-menu>
-        <v-spacer></v-spacer>
+        
         <!-- <v-tab class="black--text" to="/test">Test PAGE</v-tab> -->
         <!-- <v-tab class="black--text" to="/">Sign UP</v-tab> -->
         <!-- <v-tab class="black--text" to="/login">Login Member</v-tab> -->
@@ -56,13 +59,13 @@
         <v-tab
           v-else
           class="black--text"
-          to="/member/profile"
+          to="/deep_link/profile"
         >
           <v-icon left class="mr-1" style="font-size: 28px;">mdi-account-circle</v-icon>
           {{ loggedInUser.displayName }}
         </v-tab>
       </v-tabs>
-      <v-btn icon @click.stop="drawer = !drawer">
+      <v-btn v-if="isAuthenticated" icon @click.stop="drawer = !drawer">
           <v-icon color="black">mdi-menu</v-icon>
         </v-btn>
     </v-app-bar>
@@ -88,7 +91,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-  <v-list-item link class="black--text drawer-blur" to="/member/profile">
+  <v-list-item link class="black--text drawer-blur" to="/deep_link/profile">
           <v-list-item-icon><v-icon class="black--text">mdi-account</v-icon></v-list-item-icon>
           <v-list-item-title>โปรไฟล์</v-list-item-title>
         </v-list-item>
@@ -118,7 +121,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['isAuthenticated', 'loggedInUser'])
+    ...mapGetters('auth', ['isAuthenticated', 'loggedInUser']),
+    isAdmin() {
+      return this.isAuthenticated && this.loggedInUser && this.loggedInUser.email === 'admin@outlook.com';
+    }
   },
   created() {
     this.$store.dispatch('auth/tryAutoLogin')

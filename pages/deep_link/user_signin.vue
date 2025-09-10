@@ -4,7 +4,7 @@
             <!-- ส่วนด้านซ้ายสำหรับโลโก้ -->
             <div class="signin-left">
                 <div class="signin-adobe-logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Adobe_Corporate_Logo.png" alt="Logo" />
+                    <img src="/Image 10_12_02.png" alt="DEWGASOHOL Logo" style="width:44px; height:40px; object-fit:contain;" />
                     <div class="signin-adobe-text">
                         <span>DEWGASOHOL</span>
                         <div class="signin-adobe-desc">Sign in or create an account</div>
@@ -15,6 +15,18 @@
             <!-- การ์ดลงชื่อเข้าใช้ (ส่วนด้านขวา) -->
             <div class="signin-card">
                 <div class="signin-content">
+                    <v-fade-transition>
+                      <v-alert
+                        v-if="loginSuccess"
+                        dense
+                        text
+                        type="success"
+                        icon="$mdi-check-circle"
+                        class="mb-4"
+                      >
+                        Login successful! Redirecting...
+                      </v-alert>
+                    </v-fade-transition>
                     <div class="signin-header">
                         <h2>Sign in</h2>
                         <div class="signin-newuser">New user? <nuxt-link to="/deep_link/user_create_an_account">Create an account</nuxt-link></div>
@@ -30,7 +42,7 @@
 
                     <button class="signin-continue" @click="signIn">Continue</button>
 
-                    <div class="signin-or"><span>Or</span></div>
+                    <!-- <div class="signin-or"><span>Or</span></div>
 
                     <button class="social-btn google-btn">
                         <img class="social-icon" src="https://www.vectorlogo.zone/logos/google/google-icon.svg" alt="Google"/>
@@ -39,7 +51,7 @@
                     <button class="social-btn facebook-btn">
                         <img class="social-icon" src="https://www.vectorlogo.zone/logos/facebook/facebook-icon.svg" alt="Facebook"/>
                         <span>Continue with Facebook</span>
-                    </button>
+                    </button> -->
 
                     <a class="signin-more-options" href="#">More sign-in options</a>
                     <a class="signin-help" href="#">Get help signing in</a>
@@ -51,9 +63,17 @@
             <span>Copyright © 2025 DEWGASOHOL. All rights reserved.</span>
         </footer>
 
-        <button class="help-button">
+        <button class="help-button" @click="showHelp = true">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
         </button>
+        <div v-if="showHelp" class="help-dialog-backdrop" @click.self="showHelp = false">
+            <div class="help-dialog">
+                <h3>ช่วยเหลือ</h3>
+                <p>สำหรับอาจารย์ Email address: admin@outlook.com Password: 12345 User ทั่วไป Email address: test4@test.com Password: 1234
+                 </p>
+                <button @click="showHelp = false" class="close-help">ปิด</button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -63,7 +83,9 @@ export default {
         return {
             email: '',
             password: '',
-            errorMsg: ''
+            errorMsg: '',
+            loginSuccess: false,
+            showHelp: false
         }
     },
     methods: {
@@ -74,11 +96,14 @@ export default {
                 return;
             }
             try {
-                await this.$store.dispatch('auth/login', { 
-                    email: this.email, 
-                    password: this.password 
+                await this.$store.dispatch('auth/login', {
+                    email: this.email,
+                    password: this.password
                 });
-                this.$router.push('/member/profile');
+                this.loginSuccess = true;
+                setTimeout(() => {
+                    this.$router.push('/deep_link/profile');
+                }, 1500);
             } catch (error) {
                 this.errorMsg = error.message || 'Invalid email or password';
             }
@@ -88,6 +113,53 @@ export default {
 </script>
 
 <style scoped>
+/* --- Help Dialog --- */
+.help-dialog-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.help-dialog {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    padding: 2rem 2.5rem 1.5rem 2.5rem;
+    max-width: 350px;
+    width: 90vw;
+    text-align: center;
+    position: relative;
+}
+.help-dialog h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    color: #1473e6;
+}
+.help-dialog p {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+.close-help {
+    background: #1473e6;
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 0.6rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.close-help:hover {
+    background: #0d66d0;
+}
 /* --- Base and Background --- */
 .signin-bg {
     min-height: 100vh;

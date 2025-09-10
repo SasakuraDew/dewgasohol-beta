@@ -4,7 +4,7 @@
             <!-- ส่วนด้านซ้ายสำหรับโลโก้ -->
             <div class="signin-left">
                 <div class="signin-adobe-logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Adobe_Corporate_Logo.png" alt="Logo" />
+                    <img src="/Image 10_12_02.png" alt="DEWGASOHOL Logo" style="width:44px; height:40px; object-fit:contain;" />
                     <div class="signin-adobe-text">
                         <span>DEWGASOHOL</span>
                         <div class="signin-adobe-desc">Sign in or create an account</div>
@@ -21,11 +21,11 @@
                     </div>
 
                     <!-- [ปรับปรุง] เพิ่ม Social Sign Up เพื่อลดขั้นตอน -->
-                    <button class="social-btn">
+                    <!-- <button class="social-btn">
                         <img class="social-icon" src="https://www.vectorlogo.zone/logos/google/google-icon.svg" alt="Google"/>
                         <span>Sign up with Google</span>
                     </button>
-                    <div class="signin-or"><span>Or create with email</span></div>
+                    <div class="signin-or"><span>Or create with email</span></div> -->
 
 
 
