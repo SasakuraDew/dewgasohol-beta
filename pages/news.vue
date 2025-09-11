@@ -108,7 +108,7 @@ export default {
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-image: url('https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1500&q=80');
+	background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop');
 	background-size: cover;
 	background-position: center;
 	z-index: 1;

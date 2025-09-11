@@ -72,7 +72,17 @@
 
                     <!-- [ปรับปรุง] ปุ่มจะถูก disable จนกว่าฟอร์มจะถูกต้อง -->
                     <button class="signin-continue" :disabled="!fullname || !email || !password || !termsAccepted || loading" @click="createAccount">{{ loading ? 'กำลังสมัคร...' : 'Create account' }}</button>
-                    <div v-if="message" style="color:red; margin-top:10px">{{ message }}</div>
+                                        <div v-if="message && !message.includes('Create Account successful! Redirecting...')" style="color:red; margin-top:10px">{{ message }}</div>
+                                        <v-alert
+                                            v-if="message && message.includes('Create Account successful! Redirecting...')"
+                                            dense
+                                            text
+                                            type="success"
+                                            icon="$mdi-check-circle"
+                                            class="mb-4"
+                                        >
+                                            ( Create Account successful! Redirecting...)
+                                        </v-alert>
 
                 </div>
             </div>
@@ -443,7 +453,7 @@ export default {
                     throw new Error(result.message || 'เกิดข้อผิดพลาดในการสมัครสมาชิก');
                 }
 
-                this.message = result.message + ' กำลังนำคุณไปยังหน้าล็อกอิน...';
+                this.message = 'Create Account successful! Redirecting...';
                 this.username = '';
                 this.fullname = '';
                 this.email = '';

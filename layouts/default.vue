@@ -8,9 +8,14 @@
       <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
   <v-tabs tabs slider-color="rgba(255, 255, 255, 0)">
         <!-- <v-tab class="black--text" disabled style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL</v-tab> -->
-        <v-tab class="black--text" to="/">Home</v-tab>
-        <v-tab class="black--text" to="/news">News</v-tab>
-        <v-tab class="black--text" to="/contact">Contact</v-tab>
+        <v-tab class="black--text" to="/">หน้าหลัก</v-tab>
+        <v-tab class="black--text" to="/oil_prices">ราคาน้ำมัน</v-tab>
+        <v-tab class="black--text" to="/coupons">คูปอง</v-tab>
+
+
+
+        <v-tab class="black--text" to="/contact">ติดต่อเรา</v-tab>
+<!-- <v-tab class="black--text" to="/news">News</v-tab> -->
         <!-- <v-tab class="black--text" to="/security/blank">Blog</v-tab> -->
         <!-- <v-tab class="black--text" to="/admin/console">test</v-tab> -->
         <!-- <v-tab class="black--text" to="/forms">Forms</v-tab> -->

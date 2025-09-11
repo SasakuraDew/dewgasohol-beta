@@ -4,7 +4,7 @@ export default function ({ store, redirect }) {
 
   // เงื่อนไขที่ 1: ยังไม่ได้ล็อกอิน (ไม่มีข้อมูล user ใน store)
   // เงื่อนไขที่ 2: ล็อกอินแล้ว แต่ตำแหน่งไม่ใช่ 'admin'
-  if (!loggedInUser || loggedInUser.position !== 'admin') {
+  if (!loggedInUser || loggedInUser.position !== 'super admin') {
     // ถ้าไม่ตรงตามเงื่อนไข ให้ redirect ไปที่หน้า blank
     return redirect('/blank');
   }

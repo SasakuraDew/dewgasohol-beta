@@ -203,7 +203,7 @@ export default {
   }
 }
 </script>
-
+  middleware: 'admin-auth',
 <style scoped>
 .v-card {
   margin-top: 30px;

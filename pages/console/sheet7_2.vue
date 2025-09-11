@@ -73,7 +73,7 @@ export default {
   }
 };
 </script>
-
+  middleware: 'admin-auth',
 <style scoped>
 .parallax-container {
   position: relative;

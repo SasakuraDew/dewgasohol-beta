@@ -21,10 +21,10 @@
         <!-- Icon Section -->
         <v-row justify="center" class="icon-section">
           <v-col v-for="item in iconItems" :key="item.title" cols="6" sm="4" md="2" class="text-center">
-            <v-avatar color="rgba(255, 255, 255, 0.2)" size="100" class="mb-4 icon-avatar">
+            <v-avatar @click="showDialog(item)" color="rgba(255, 255, 255, 0.2)" size="100" class="mb-4 icon-avatar">
               <v-icon :color="item.color" size="50">{{ item.icon }}</v-icon>
             </v-avatar>
-            <h3 class="white--text font-weight-medium">{{ item.title }}</h3>
+            <h3 class="white--text font-weight-medium">{{ item.title.split('(')[0] }}</h3>
           </v-col>
         </v-row>
 
@@ -142,6 +142,19 @@
         </v-row>
       </v-container>
     </div>
+
+    <!-- Dialog for Icon Details -->
+    <v-dialog v-model="dialog" max-width="600px">
+      <v-card>
+        <v-card-title class="headline">{{ dialogTitle }}</v-card-title>
+        <v-card-text class="pt-4">{{ dialogText }}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="dialog = false">ปิด</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </div>
 </template>
 
@@ -152,6 +165,9 @@ export default {
     name: 'HomePage',
     data() {
         return {
+            dialog: false,
+            dialogTitle: '',
+            dialogText: '',
             stockData: {
                 setIndex: 'กำลังโหลด...',
                 nasdaq: '13,500.75 (+45.30)',
@@ -160,15 +176,51 @@ export default {
             intervalId: null,
             apiKey: '023PY4D7PLBL210Q', // ใส่ API Key ของ Alpha Vantage ที่นี่
             iconItems: [
-                { title: 'วิสัยทัศน์', icon: 'mdi-flag-variant', color: 'white' },
-                { title: 'ความยั่งยืน', icon: 'mdi-leaf', color: 'white' },
-                { title: 'นวัตกรรม', icon: 'mdi-lightbulb-on-outline', color: 'white' },
-                { title: 'องค์กร', icon: 'mdi-office-building', color: 'white' },
-                { title: 'ติดต่อเรา', icon: 'mdi-map-marker-outline', color: 'white' },
+                {
+                    title: 'วิสัยทัศน์ (Vision)',
+                    icon: 'mdi-flag-variant',
+                    color: 'white',
+                    text: 'เรามุ่งมั่นที่จะเป็นผู้นำในธุรกิจพลังงานทางเลือก สร้างสรรค์นวัตกรรมเพื่ออนาคตที่ยั่งยืนสำหรับทุกคน'
+                },
+                {
+                    title: 'ความยั่งยืน (Sustainability)',
+                    icon: 'mdi-leaf',
+                    color: 'white',
+                    text: 'เราดำเนินธุรกิจโดยคำนึงถึงผลกระทบต่อสิ่งแวดล้อมและสังคม ส่งเสริมการใช้พลังงานสะอาด และพัฒนาชุมชนไปพร้อมกัน'
+                },
+                {
+                    title: 'นวัตกรรม (Innovation)',
+                    icon: 'mdi-lightbulb-on-outline',
+                    color: 'white',
+                    text: 'เราไม่หยุดนิ่งที่จะค้นคว้าและพัฒนาเทคโนโลยีใหม่ๆ เพื่อเพิ่มประสิทธิภาพและสร้างมูลค่าเพิ่มให้กับผลิตภัณฑ์และบริการของเรา'
+                },
+                {
+                    title: 'องค์กร (Organization)',
+                    icon: 'mdi-office-building',
+                    color: 'white',
+                    text: 'เราคือองค์กรที่ขับเคลื่อนด้วยทีมงานมืออาชีพ มีวัฒนธรรมองค์กรที่เปิดกว้างและพร้อมรับการเปลี่ยนแปลงเพื่อการเติบโตอย่างมั่นคง'
+                },
+                {
+                    title: 'ติดต่อเรา (Contact Us)',
+                    icon: 'mdi-map-marker-outline',
+                    color: 'white',
+                    text: 'สามารถติดต่อเราได้ที่: บริษัท DEW Gasohol จำกัด (มหาชน) 123 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110 | โทร: 02-123-4567'
+                },
+                {
+                    title: 'ทีมงาน (Team)',
+                    icon: 'mdi-account-group',
+                    color: 'white',
+                    text: 'ทีมงานของเราประกอบด้วยผู้เชี่ยวชาญหลากหลายสาขาที่พร้อมให้บริการและขับเคลื่อนองค์กรไปสู่ความสำเร็จ'
+                },
             ]
         }
     },
     methods: {
+        showDialog(item) {
+            this.dialogTitle = item.title;
+            this.dialogText = item.text;
+            this.dialog = true;
+        },
         async fetchStockData() {
             try {
                 // Alpha Vantage API: GLOBAL_QUOTE for SET Index (symbol: SET.BK)

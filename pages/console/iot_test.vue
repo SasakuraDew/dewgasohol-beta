@@ -100,7 +100,7 @@ const SensorLineChart = {
 }
 
 export default {
-  
+  middleware: 'admin-auth',
   components: {
     SensorLineChart
   },
@@ -165,7 +165,6 @@ export default {
       const labels = sortedData.map(item => new Date(item.created_at).toLocaleTimeString('th-TH'));
       const tempData = sortedData.map(item => item.temperature);
       const humidData = sortedData.map(item => item.humidity);
-
       return {
         labels: labels,
         datasets: [
