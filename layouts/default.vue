@@ -71,9 +71,10 @@
           to="/deep_link/profile"
         >
           <v-icon left class="mr-1" style="font-size: 28px;">mdi-account-circle</v-icon>
-          {{ loggedInUser.displayName }}
+          <span style="font-variant: normal; text-transform: none;">{{ loggedInUser.display_name }}</span>
         </v-tab>
       </v-tabs>
+  <!-- <pre style="color:red; background: #fff; font-size: 12px;">{{ loggedInUser }}</pre> -->
       <v-btn v-if="isAuthenticated" icon @click.stop="drawer = !drawer">
           <v-icon color="black">mdi-menu</v-icon>
         </v-btn>
@@ -95,7 +96,7 @@
             <v-img src="/This is number 357.jpg"></v-img>
           </v-list-item-avatar>
           <v-list-item-content class="black--text">
-            <v-list-item-title class="headline">{{ loggedInUser.displayName }}</v-list-item-title>
+            <v-list-item-title class="headline">{{ loggedInUser.display_name }}</v-list-item-title>
             <v-list-item-subtitle>{{ loggedInUser.email }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
