@@ -89,7 +89,7 @@
 
 <script>
 export default {
-  
+  middleware: 'admin-auth',
   data() {
     return {
   stations: [],

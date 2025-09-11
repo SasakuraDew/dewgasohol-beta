@@ -19,7 +19,7 @@
         <v-card>
           <v-card-title class="d-flex justify-space-between">
             <span>{{ fuel.name }}</span>
-            <v-chip small :color="getAlertColor(fuel.percentage)">
+            <v-chip small :color="getAlertColor(fuel.percentage, fuel.name)">
               {{ fuel.percentage.toFixed(1) }}%
             </v-chip>
           </v-card-title>
@@ -28,14 +28,14 @@
               <div class="tank-body">
                 <div
                   class="fuel-level"
-                  :style="{ height: fuel.percentage + '%', backgroundColor: getAlertColor(fuel.percentage) }"
+                  :style="{ height: fuel.percentage + '%', backgroundColor: getAlertColor(fuel.percentage, fuel.name) }"
                 ></div>
               </div>
             </div>
             <p class="text-h5 font-weight-bold">{{ fuel.currentLiters.toLocaleString() }} ลิตร</p>
             <v-progress-linear
               :value="fuel.percentage"
-              :color="getAlertColor(fuel.percentage)"
+              :color="getAlertColor(fuel.percentage, fuel.name)"
               height="20"
               striped
               class="mt-2"
@@ -127,6 +127,7 @@
 
 <script>
 export default {
+  middleware: 'admin-auth',
   layout: 'console',
   data() {
     return {
@@ -149,14 +150,7 @@ export default {
         { text: 'ปริมาณ (ลิตร)', value: 'amount', align: 'end' },
         { text: 'คงเหลือ (ลิตร)', value: 'remaining', align: 'end' },
       ],
-      transactionHistory: [
-        { date: '2025-09-11', type: 'เติม', fuelName: 'ดีเซล B7', amount: '+10,000', remaining: '25,000' },
-        { date: '2025-09-10', type: 'เบิก', fuelName: 'แก๊สโซฮอล์ 95', amount: '-500', remaining: '15,000' },
-        { date: '2025-09-10', type: 'เบิก', fuelName: 'แก๊สโซฮอล์ 91', amount: '-1,200', remaining: '8,000' },
-        { date: '2025-09-09', type: 'เติม', fuelName: 'E85', amount: '+5,000', remaining: '5,800' },
-         { date: '2025-09-09', type: 'เบิก', fuelName: 'ดีเซลพรีเมียม', amount: '-3,000', remaining: '2,500' },
-      ],
-      // For report date range picker
+      transactionHistory: [],
       dateMenu: false,
       dateRange: [],
     };
@@ -166,14 +160,33 @@ export default {
       return this.dateRange.join(' ~ ')
     },
   },
+  mounted() {
+    this.fetchTransactionHistory();
+  },
   methods: {
-    getAlertColor(percentage) {
+    async fetchTransactionHistory() {
+      try {
+        const res = await fetch('http://localhost/dewgasohol_beta/tank_stock.php');
+        const data = await res.json();
+        this.transactionHistory = data.map(item => ({
+          date: item.updated_at || '',
+          type: item.last_action || '',
+          fuelName: item.fuel_type || '',
+          amount: item.last_amount ? (item.last_action === 'เติม' ? '+' : '-') + Number(item.last_amount).toLocaleString() : '',
+          remaining: item.current_volume ? Number(item.current_volume).toLocaleString() : '',
+        }));
+      } catch (e) {
+        // error
+      }
+    },
+    getAlertColor(percentage, fuelName) {
+      if (fuelName === 'แก๊สโซฮอล์ 95') return '#ff9800';
+      if (fuelName === 'ดีเซล B7') return 'primary';
       if (percentage < 10) return 'red';
       if (percentage < 30) return 'yellow';
       return 'green';
     },
     openTransactionDialog(type) {
-      // Placeholder for opening a dialog to add/withdraw fuel
       alert(`เปิดหน้าต่างสำหรับ "${type === 'add' ? 'เติม' : 'เบิก'}น้ำมัน"`);
     },
   },
