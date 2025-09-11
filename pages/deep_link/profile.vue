@@ -73,7 +73,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  middleware: 'auth',
+  
   name: 'ProfilePage',
   computed: {
     ...mapGetters('auth', ['loggedInUser'])

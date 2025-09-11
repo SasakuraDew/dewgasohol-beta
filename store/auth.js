@@ -45,11 +45,12 @@ export const actions = {
 
       return user; // Return user data on success
 
-    } catch (error) {
-      // Clear any stale user data and re-throw the error
-      localStorage.removeItem('user_email')
-      commit('setUser', null)
-      throw error
+    } catch(e) {
+        // If fetching user fails, do not clear login state. This prevents the user
+        // from being logged out if the backend call fails during auto-login.
+        // localStorage.removeItem('user_email')
+        // commit('setUser', null)
+        console.error('Auto login failed:', e); // Log the error for debugging
     }
   },
 

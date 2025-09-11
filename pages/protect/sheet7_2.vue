@@ -48,7 +48,7 @@
 
 <script>
 export default {
-  middleware: 'auth',
+  
   // layout: 'iot_layout' // หากคุณมี layout แยกสำหรับหน้านี้
   name: 'DHT22Page',
   data() {
