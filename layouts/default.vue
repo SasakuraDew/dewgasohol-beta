@@ -48,6 +48,9 @@
               <v-list-item link to="/console/iot_test">
                 <v-list-item-title>test API</v-list-item-title>
               </v-list-item>
+              <v-list-item link to="/console/stock">
+                <v-list-item-title>Stock</v-list-item-title>
+              </v-list-item>
             </v-list>
           </v-menu>
         
