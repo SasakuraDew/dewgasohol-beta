@@ -80,7 +80,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  // middleware: 'auth',
+  middleware: 'admin-auth',
   data() {
     return {
       users: [],

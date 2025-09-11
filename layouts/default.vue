@@ -31,16 +31,16 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item link to="/arsenal-data/stations">
+              <v-list-item link to="/console/stations">
                 <v-list-item-title>Stations</v-list-item-title>
               </v-list-item>
-              <v-list-item link to="/deep_link/users">
+              <v-list-item link to="/console/users">
                 <v-list-item-title>Users</v-list-item-title>
               </v-list-item>
-              <v-list-item link to="/wokwi_iot/sheet7_2">
+              <v-list-item link to="/console/sheet7_2">
                 <v-list-item-title>Wokwi Get DHT22</v-list-item-title>
               </v-list-item>
-              <v-list-item link to="/wokwi_iot/iot_test">
+              <v-list-item link to="/console/iot_test">
                 <v-list-item-title>test API</v-list-item-title>
               </v-list-item>
             </v-list>

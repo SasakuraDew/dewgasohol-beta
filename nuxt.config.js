@@ -29,8 +29,10 @@ export default {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: ['~/plugins/vuetify.js'
-    ,{ src: '~/plugins/axios.js', ssr: false }
+  plugins: [
+    '~/plugins/vuetify.js',
+    { src: '~/plugins/axios.js', ssr: false },
+    { src: '~/plugins/store-init.js', ssr: false } // เพิ่ม plugin นี้เข้ามา
   ],
   /*
   ** Nuxt.js dev-modules
@@ -45,7 +47,25 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    // '@nuxtjs/auth' // Comment out to disable the auth module and resolve duplicate namespace error
   ],
+  /*
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/api/auth/login', 
+            method: 'post', 
+            propertyName: 'token' 
+          },
+          logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
+          }
+      }
+    }
+  },
+  */
+
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

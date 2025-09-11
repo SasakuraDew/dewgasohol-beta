@@ -91,21 +91,49 @@ export default {
     methods: {
         async signIn() {
             this.errorMsg = '';
+            this.loginSuccess = false;
+
             if (!this.email || !this.password) {
-                this.errorMsg = 'Please enter email and password';
+                this.errorMsg = 'กรุณากรอกอีเมลและรหัสผ่าน';
                 return;
             }
+
             try {
-                await this.$store.dispatch('auth/login', {
-                    email: this.email,
-                    password: this.password
+                const apiUrl = 'http://localhost/dewgasohol_beta/login.php';
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: this.email, password: this.password })
                 });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || 'เกิดข้อผิดพลาดในการล็อกอิน');
+                }
+
+                // --- START: ส่วนที่แก้ไข --- 
+                // 1. บันทึกข้อมูลผู้ใช้ลงใน localStorage (แบบถาวร)
+                localStorage.setItem('auth_user', JSON.stringify(result.user));
+
+                // 2. บันทึกข้อมูลผู้ใช้ลงใน Vuex Store (แบบชั่วคราว)
+                this.$store.commit('auth/setUser', result.user);
+
+                // 3. ตรวจสอบถ้าเป็น Super Admin ให้แสดงใน Console
+                if (result.user && result.user.email === 'admin@outlook.com') {
+                    console.log('Welcome Super Admin! Full control enabled.');
+                }
+
+                // 4. แสดงข้อความสำเร็จและเปลี่ยนหน้าไปที่ profile.vue
                 this.loginSuccess = true;
                 setTimeout(() => {
-                    this.$router.push('/deep_link/profile');
+                    this.$router.push('/deep_link/profile'); // ใช้ Nuxt Router
                 }, 1500);
+                // --- END: ส่วนที่แก้ไข ---
+
             } catch (error) {
-                this.errorMsg = error.message || 'Invalid email or password';
+                this.errorMsg = error.message;
             }
         }
     }

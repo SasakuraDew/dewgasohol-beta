@@ -55,7 +55,7 @@ export const actions = {
   },
 
   logout({ commit }) {
-    localStorage.removeItem('user_email')
+    localStorage.removeItem('auth_user') // อัปเดตให้ใช้ key ที่ถูกต้อง
     commit('setUser', null)
   },
 

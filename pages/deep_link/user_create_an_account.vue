@@ -8,7 +8,7 @@
                     <div class="signin-adobe-text">
                         <span>DEWGASOHOL</span>
                         <div class="signin-adobe-desc">Sign in or create an account</div>
-                    </div>
+                    </div> 
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
 
 
 
-                    <label class="signin-label" for="username-input">Username</label>
+                    <label class="signin-label" for="username-input">Username (Display name)</label>
                     <input id="username-input" class="signin-input" type="text" placeholder="Enter your username" v-model="username" />
 
                     <label class="signin-label" for="fullname-input">Full Name</label>
@@ -411,34 +411,54 @@ export default {
     },
     methods: {
         async createAccount() {
-            if (!this.username || !this.fullname || !this.email || !this.password || !this.termsAccepted) {
-                this.message = 'กรุณากรอกข้อมูลให้ครบถ้วนและยอมรับเงื่อนไข';
+            if (!this.username || !this.fullname || !this.email || !this.password) {
+                this.message = 'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน (Username, ชื่อ, อีเมล, รหัสผ่าน)';
                 return;
             }
+            if (!this.termsAccepted) {
+                this.message = 'กรุณายอมรับเงื่อนไขการใช้งาน';
+                return;
+            }
+
             this.loading = true;
             this.message = '';
+
             try {
-                const res = await fetch('http://localhost/dewgasohol_beta/deeplink_insert.php', {
+                const apiUrl = 'http://localhost/dewgasohol_beta/register.php';
+
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         fullname: this.fullname,
-                        display_name: this.username,
+                        display_name: this.username, // ส่ง display_name ไปด้วย
                         email: this.email,
                         password: this.password
                     })
                 });
-                const data = await res.json();
-                if (data.success) {
-                    alert('Your account is ready.');
-                    this.$router.push('/deep_link/user_signin');
-                } else {
-                    this.message = data.error || 'เกิดข้อผิดพลาด';
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || 'เกิดข้อผิดพลาดในการสมัครสมาชิก');
                 }
-            } catch (e) {
-                this.message = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์';
+
+                this.message = result.message + ' กำลังนำคุณไปยังหน้าล็อกอิน...';
+                this.username = '';
+                this.fullname = '';
+                this.email = '';
+                this.password = '';
+                this.termsAccepted = false;
+
+                setTimeout(() => {
+                    this.$router.push('/deep_link/user_signin');
+                }, 2000);
+
+            } catch (error) {
+                this.message = error.message;
+            } finally {
+                this.loading = false;
             }
-            this.loading = false;
         }
     }
 }
