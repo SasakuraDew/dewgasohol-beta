@@ -177,18 +177,7 @@ export default {
   width: 100%;
   min-height: 100vh;
   padding-top: 64px; /* Adjust if you have a fixed toolbar */
-  background-color: rgba(0, 0, 0, 0.089);
-}
-.parallax-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-image: url('/devve.jpg');
-  background-size: cover;
-  background-position: center;
-  z-index: -1; /* Changed from 1 to -1 */
+  background-color: rgba(4, 0, 255, 0.144);
 }
 .content-section {
   position: relative;
