@@ -8,13 +8,22 @@
       <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
   <v-tabs tabs slider-color="rgba(255, 255, 255, 0)">
         <!-- <v-tab class="black--text" disabled style="font-weight:bold; font-size:20px; min-width:140px;">DEWGASOHOL</v-tab> -->
-        <v-tab class="black--text" to="/">หน้าหลัก</v-tab>
-        <v-tab class="black--text" to="/oil_prices">ราคาน้ำมัน</v-tab>
-        <v-tab class="black--text" to="/coupons">คูปอง</v-tab>
-
-
-
-        <v-tab class="black--text" to="/contact">ติดต่อเรา</v-tab>
+        <v-tab class="black--text" to="/">
+          <v-icon left class="mr-1">mdi-home</v-icon>
+          หน้าหลัก
+        </v-tab>
+        <v-tab class="black--text" to="/oil_prices">
+          <v-icon left class="mr-1">mdi-currency-usd</v-icon>
+          ราคาน้ำมัน
+        </v-tab>
+        <v-tab class="black--text" to="/coupons">
+          <v-icon left class="mr-1">mdi-ticket-percent</v-icon>
+          คูปอง
+        </v-tab>
+        <v-tab class="black--text" to="/contact">
+          <v-icon left class="mr-1">mdi-phone</v-icon>
+          ติดต่อเรา
+        </v-tab>
 <!-- <v-tab class="black--text" to="/news">News</v-tab> -->
         <!-- <v-tab class="black--text" to="/security/blank">Blog</v-tab> -->
         <!-- <v-tab class="black--text" to="/admin/console">test</v-tab> -->
@@ -37,18 +46,23 @@
             </template>
             <v-list>
               <v-list-item link to="/console/stations">
+                <v-list-item-icon><v-icon>mdi-gas-station</v-icon></v-list-item-icon>
                 <v-list-item-title>Stations</v-list-item-title>
               </v-list-item>
               <v-list-item link to="/console/users">
+                <v-list-item-icon><v-icon>mdi-account-group</v-icon></v-list-item-icon>
                 <v-list-item-title>Users</v-list-item-title>
               </v-list-item>
               <v-list-item link to="/console/sheet7_2">
+                <v-list-item-icon><v-icon>mdi-thermometer</v-icon></v-list-item-icon>
                 <v-list-item-title>Wokwi Get DHT22</v-list-item-title>
               </v-list-item>
               <v-list-item link to="/console/iot_test">
+                <v-list-item-icon><v-icon>mdi-api</v-icon></v-list-item-icon>
                 <v-list-item-title>test API</v-list-item-title>
               </v-list-item>
               <v-list-item link to="/console/stock">
+                <v-list-item-icon><v-icon>mdi-oil</v-icon></v-list-item-icon>
                 <v-list-item-title>Stock</v-list-item-title>
               </v-list-item>
             </v-list>

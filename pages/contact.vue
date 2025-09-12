@@ -177,6 +177,7 @@ export default {
   width: 100%;
   min-height: 100vh;
   padding-top: 64px; /* Adjust if you have a fixed toolbar */
+  background-color: rgba(0, 0, 0, 0.089);
 }
 .parallax-background {
   position: fixed;
@@ -184,7 +185,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100vh;
-  background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop');
+  background-image: url('/devve.jpg');
   background-size: cover;
   background-position: center;
   z-index: -1; /* Changed from 1 to -1 */
