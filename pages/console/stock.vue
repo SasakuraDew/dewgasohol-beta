@@ -237,12 +237,12 @@ export default {
     return {
       editMode: false,
       fuelStocks: [
-        { id: 1, name: 'แก๊สโซฮอล์ 95', currentLiters: 15000, capacityLiters: 20000 },
-        { id: 2, name: 'แก๊สโซฮอล์ 91', currentLiters: 8000, capacityLiters: 20000 },
-        { id: 3, name: 'ดีเซล B7', currentLiters: 25000, capacityLiters: 30000 },
+        { id: 1, name: 'แก๊สโซฮอล์ 95', currentLiters: 12000, capacityLiters: 20000 },
+        { id: 2, name: 'แก๊สโซฮอล์ 91', currentLiters: 12000, capacityLiters: 20000 },
+        { id: 3, name: 'ดีเซล B7', currentLiters: 20021, capacityLiters: 30000 },
         { id: 4, name: 'ดีเซลพรีเมียม', currentLiters: 2500, capacityLiters: 15000 },
         { id: 5, name: 'E20', currentLiters: 1800, capacityLiters: 10000 },
-        { id: 6, name: 'E85', currentLiters: 800, capacityLiters: 10000 },
+        { id: 6, name: 'E85', currentLiters: 950, capacityLiters: 10000 },
       ].map(fuel => ({
         ...fuel,
         percentage: (fuel.currentLiters / fuel.capacityLiters) * 100,
@@ -349,7 +349,11 @@ export default {
     },
     getAlertColor(percentage, fuelName) {
       if (fuelName === 'แก๊สโซฮอล์ 95') return '#ff9800';
-      if (fuelName === 'ดีเซล B7') return 'primary';
+      if (fuelName === 'ดีเซล B7') {
+        if (percentage < 10) return 'red';
+        if (percentage < 30) return 'yellow';
+        return 'green';
+      }
       if (percentage < 10) return 'red';
       if (percentage < 30) return 'yellow';
       return 'green';
@@ -426,10 +430,10 @@ export default {
   display: inline-block;
   width: 80px;
   height: 120px;
-  border: 3px solid #333;
+  border: 3px solid #333333;
   border-radius: 10px;
   position: relative;
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   overflow: hidden;
 }
 
