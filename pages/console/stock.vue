@@ -24,13 +24,14 @@
             </v-chip>
           </v-card-title>
           <v-card-text class="text-center">
-            <div class="tank-visualization my-3">
+            <div class="tank-visualization my-3 position-relative">
               <div class="tank-body">
                 <div
                   class="fuel-level"
                   :style="{ height: fuel.percentage + '%', backgroundColor: getAlertColor(fuel.percentage, fuel.name) }"
                 ></div>
               </div>
+              <div class="tank-id-label">ถังที่ {{ fuel.id }}</div>
             </div>
             <p class="text-h5 font-weight-bold">{{ fuel.currentLiters.toLocaleString() }} ลิตร</p>
             <v-progress-linear
@@ -54,10 +55,10 @@
           <v-card-title>
             ประวัติการเบิก-เติม
             <v-spacer></v-spacer>
-            <v-btn color="primary" class="mr-2" @click="openTransactionDialog('add')">
+            <v-btn color="primary" class="mr-2" @click="showTransactionModal('add')">
               <v-icon left>mdi-plus</v-icon> เติมน้ำมัน
             </v-btn>
-            <v-btn color="warning" class="mr-2" @click="openTransactionDialog('withdraw')">
+            <v-btn color="warning" class="mr-2" @click="showTransactionModal('withdraw')">
               <v-icon left>mdi-minus</v-icon> เบิกน้ำมัน
             </v-btn>
              <v-btn color="info" @click="editMode = !editMode">
@@ -66,15 +67,118 @@
           </v-card-title>
           <v-card-text>
             <v-data-table
-              :headers="historyHeaders"
+              :headers="editMode ? historyHeadersEdit : historyHeaders"
               :items="transactionHistory"
               :items-per-page="10"
               class="elevation-1"
-            ></v-data-table>
+            >
+              <template v-slot:item.actions="{ item }">
+                <v-btn icon small color="info" @click="openEditDialog(item)"><v-icon>mdi-pencil</v-icon></v-btn>
+                <v-btn icon small color="error" @click="openDeleteDialog(item)"><v-icon>mdi-delete</v-icon></v-btn>
+              </template>
+            </v-data-table>
+    <!-- Modal: Edit Transaction -->
+    <v-dialog v-model="editDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h6">แก้ไขข้อมูล</span>
+        </v-card-title>
+        <v-card-text>
+          <v-form ref="editForm" v-model="editFormValid">
+            <v-select
+              v-model="editForm.tank_id"
+              :items="fuelStocks.map(f=>({text:f.name,value:f.id}))"
+              label="เลือกถังน้ำมัน"
+              :rules="[v=>!!v||'กรุณาเลือกถัง']"
+              required
+            ></v-select>
+            <v-select
+              v-model="editForm.action"
+              :items="['เติม','เบิก']"
+              label="ประเภท"
+              :rules="[v=>!!v||'กรุณาเลือกประเภท']"
+              required
+            ></v-select>
+            <v-text-field
+              v-model="editForm.amount"
+              label="จำนวนลิตร"
+              type="number"
+              :rules="[v=>!!v||'กรุณากรอกจำนวน',v=>v>0||'ต้องมากกว่า 0']"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="editForm.remain"
+              label="คงเหลือหลังทำรายการ (ลิตร)"
+              type="number"
+              :rules="[v=>!!v||'กรุณากรอกคงเหลือ']"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="editForm.created_at"
+              label="วันที่"
+              type="date"
+              :rules="[v=>!!v||'กรุณาเลือกวันที่']"
+              required
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="closeEditDialog">ยกเลิก</v-btn>
+          <v-btn color="primary" :disabled="!editFormValid" @click="submitEdit">บันทึก</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
+
+    <!-- Modal: Add/Withdraw Transaction -->
+    <v-dialog v-model="transactionDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h6">{{ transactionType === 'add' ? 'เติมน้ำมัน' : 'เบิกน้ำมัน' }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-form ref="transactionForm" v-model="transactionFormValid">
+            <v-select
+              v-model="transactionForm.tank_id"
+              :items="fuelStocks.map(f=>({text:f.name,value:f.id}))"
+              label="เลือกถังน้ำมัน"
+              :rules="[v=>!!v||'กรุณาเลือกถัง']"
+              required
+            ></v-select>
+            <v-text-field
+              v-model="transactionForm.amount"
+              label="จำนวนลิตร"
+              type="number"
+              :rules="[v=>!!v||'กรุณากรอกจำนวน',v=>v>0||'ต้องมากกว่า 0']"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="transactionForm.remain"
+              label="คงเหลือหลังทำรายการ (ลิตร)"
+              type="number"
+              :rules="[v=>!!v||'กรุณากรอกคงเหลือ']"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="transactionForm.created_at"
+              label="วันที่"
+              type="date"
+              :rules="[v=>!!v||'กรุณาเลือกวันที่']"
+              required
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="closeTransactionDialog">ยกเลิก</v-btn>
+          <v-btn color="primary" :disabled="!transactionFormValid" @click="submitTransaction">บันทึก</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <!-- Reports and Export -->
     <v-row>
@@ -131,7 +235,7 @@ export default {
   layout: 'console',
   data() {
     return {
-      editMode: false, // Assume manager role for now
+      editMode: false,
       fuelStocks: [
         { id: 1, name: 'แก๊สโซฮอล์ 95', currentLiters: 15000, capacityLiters: 20000 },
         { id: 2, name: 'แก๊สโซฮอล์ 91', currentLiters: 8000, capacityLiters: 20000 },
@@ -150,9 +254,37 @@ export default {
         { text: 'ปริมาณ (ลิตร)', value: 'amount', align: 'end' },
         { text: 'คงเหลือ (ลิตร)', value: 'remain', align: 'end' },
       ],
+      historyHeadersEdit: [
+        { text: 'วันที่', value: 'created_at' },
+        { text: 'รายการ', value: 'action' },
+        { text: 'ถัง', value: 'tank_id' },
+        { text: 'ปริมาณ (ลิตร)', value: 'amount', align: 'end' },
+        { text: 'คงเหลือ (ลิตร)', value: 'remain', align: 'end' },
+        { text: 'การกระทำ', value: 'actions', sortable: false },
+      ],
+      editDialog: false,
+      editForm: {
+        id: '',
+        tank_id: '',
+        action: '',
+        amount: '',
+        remain: '',
+        created_at: '',
+      },
+      editFormValid: false,
       transactionHistory: [],
       dateMenu: false,
       dateRange: [],
+      // Modal state
+      transactionDialog: false,
+      transactionType: 'add',
+      transactionForm: {
+        tank_id: '',
+        amount: '',
+        remain: '',
+        created_at: new Date().toISOString().slice(0, 10),
+      },
+      transactionFormValid: false,
     };
   },
   computed: {
@@ -164,6 +296,44 @@ export default {
     this.fetchTransactionHistory();
   },
   methods: {
+    openEditDialog(item) {
+      this.editForm = {
+        id: item.id,
+        tank_id: item.tank_id,
+        action: item.action,
+        amount: item.amount.replace(/,/g, ''),
+        remain: item.remain.replace(/,/g, ''),
+        created_at: item.created_at,
+      };
+      this.editDialog = true;
+    },
+    closeEditDialog() {
+      this.editDialog = false;
+    },
+    async submitEdit() {
+      if (!this.editFormValid) return;
+      const payload = { ...this.editForm };
+      try {
+        const res = await fetch('http://localhost/dewgasohol_beta/tank_history_update.php', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.success) {
+          this.$toast && this.$toast.success('แก้ไขสำเร็จ');
+          this.fetchTransactionHistory();
+          this.closeEditDialog();
+        } else {
+          this.$toast && this.$toast.error('แก้ไขไม่สำเร็จ: ' + (result.message || ''));
+        }
+      } catch (e) {
+        this.$toast && this.$toast.error('เกิดข้อผิดพลาด');
+      }
+    },
+    openDeleteDialog(item) {
+      // TODO: implement delete modal
+    },
     async fetchTransactionHistory() {
       try {
         const res = await fetch('http://localhost/dewgasohol_beta/tank_history.php');
@@ -184,15 +354,27 @@ export default {
       if (percentage < 30) return 'yellow';
       return 'green';
     },
-    openTransactionDialog(type) {
-      // ตัวอย่าง dialog จริงควรใช้ v-dialog, ที่นี่ใช้ prompt สำหรับ demo
-      const tank_id = prompt('กรอก tank_id (ตัวเลข):');
-      const amount = prompt('กรอกจำนวนลิตร:');
-      const remain = prompt('กรอกคงเหลือหลังทำรายการ:');
-      const created_at = new Date().toISOString().slice(0, 10);
-      if (!tank_id || !amount || !remain) return;
-      const action = type === 'add' ? 'เติม' : 'เบิก';
-      this.addTankHistory({ tank_id, action, amount, remain, created_at });
+    showTransactionModal(type) {
+      this.transactionType = type;
+      this.transactionDialog = true;
+      this.transactionForm = {
+        tank_id: '',
+        amount: '',
+        remain: '',
+        created_at: new Date().toISOString().slice(0, 10),
+      };
+    },
+    closeTransactionDialog() {
+      this.transactionDialog = false;
+    },
+    async submitTransaction() {
+      if (!this.transactionFormValid) return;
+      const payload = {
+        ...this.transactionForm,
+        action: this.transactionType === 'add' ? 'เติม' : 'เบิก',
+      };
+      await this.addTankHistory(payload);
+      this.closeTransactionDialog();
     },
 
     async addTankHistory(payload) {
@@ -249,6 +431,19 @@ export default {
   position: relative;
   background-color: #f0f0f0;
   overflow: hidden;
+}
+
+.tank-id-label {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .tank-body {
