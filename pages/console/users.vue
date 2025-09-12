@@ -9,7 +9,7 @@
         <v-list>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title>{{ loggedInUser.displayName }}</v-list-item-title>
+              <v-list-item-title>{{ loggedInUser.display_name }}</v-list-item-title>
               <v-list-item-subtitle>Display Name</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>

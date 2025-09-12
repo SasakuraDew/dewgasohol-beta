@@ -144,11 +144,11 @@ export default {
         percentage: (fuel.currentLiters / fuel.capacityLiters) * 100,
       })),
       historyHeaders: [
-        { text: 'วันที่', value: 'date' },
-        { text: 'รายการ', value: 'type' },
-        { text: 'ชนิดน้ำมัน', value: 'fuelName' },
+        { text: 'วันที่', value: 'created_at' },
+        { text: 'รายการ', value: 'action' },
+        { text: 'ถัง', value: 'tank_id' },
         { text: 'ปริมาณ (ลิตร)', value: 'amount', align: 'end' },
-        { text: 'คงเหลือ (ลิตร)', value: 'remaining', align: 'end' },
+        { text: 'คงเหลือ (ลิตร)', value: 'remain', align: 'end' },
       ],
       transactionHistory: [],
       dateMenu: false,
@@ -166,14 +166,12 @@ export default {
   methods: {
     async fetchTransactionHistory() {
       try {
-        const res = await fetch('http://localhost/dewgasohol_beta/tank_stock.php');
+        const res = await fetch('http://localhost/dewgasohol_beta/tank_history.php');
         const data = await res.json();
         this.transactionHistory = data.map(item => ({
-          date: item.updated_at || '',
-          type: item.last_action || '',
-          fuelName: item.fuel_type || '',
-          amount: item.last_amount ? (item.last_action === 'เติม' ? '+' : '-') + Number(item.last_amount).toLocaleString() : '',
-          remaining: item.current_volume ? Number(item.current_volume).toLocaleString() : '',
+          ...item,
+          amount: item.amount ? Number(item.amount).toLocaleString() : '',
+          remain: item.remain ? Number(item.remain).toLocaleString() : '',
         }));
       } catch (e) {
         // error
@@ -187,7 +185,55 @@ export default {
       return 'green';
     },
     openTransactionDialog(type) {
-      alert(`เปิดหน้าต่างสำหรับ "${type === 'add' ? 'เติม' : 'เบิก'}น้ำมัน"`);
+      // ตัวอย่าง dialog จริงควรใช้ v-dialog, ที่นี่ใช้ prompt สำหรับ demo
+      const tank_id = prompt('กรอก tank_id (ตัวเลข):');
+      const amount = prompt('กรอกจำนวนลิตร:');
+      const remain = prompt('กรอกคงเหลือหลังทำรายการ:');
+      const created_at = new Date().toISOString().slice(0, 10);
+      if (!tank_id || !amount || !remain) return;
+      const action = type === 'add' ? 'เติม' : 'เบิก';
+      this.addTankHistory({ tank_id, action, amount, remain, created_at });
+    },
+
+    async addTankHistory(payload) {
+      try {
+        const res = await fetch('http://localhost/dewgasohol_beta/tank_history_update.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.success) {
+          this.$toast && this.$toast.success('บันทึกสำเร็จ');
+          this.fetchTransactionHistory();
+        } else {
+          this.$toast && this.$toast.error('บันทึกไม่สำเร็จ: ' + (result.message || ''));
+        }
+      } catch (e) {
+        this.$toast && this.$toast.error('เกิดข้อผิดพลาด');
+      }
+    },
+
+    async editTankHistory(row) {
+      // ตัวอย่าง: แก้ไขปริมาณ
+      const newAmount = prompt('แก้ไขปริมาณ (ลิตร):', row.amount);
+      if (!newAmount) return;
+      try {
+        const res = await fetch('http://localhost/dewgasohol_beta/tank_history_update.php', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: row.id, amount: newAmount })
+        });
+        const result = await res.json();
+        if (result.success) {
+          this.$toast && this.$toast.success('แก้ไขสำเร็จ');
+          this.fetchTransactionHistory();
+        } else {
+          this.$toast && this.$toast.error('แก้ไขไม่สำเร็จ: ' + (result.message || ''));
+        }
+      } catch (e) {
+        this.$toast && this.$toast.error('เกิดข้อผิดพลาด');
+      }
     },
   },
 };

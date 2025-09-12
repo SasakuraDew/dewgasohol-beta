@@ -9,59 +9,65 @@
             Admin Console
           </v-card-title>
           <v-card-text>
-            ยินดีต้อนรับ Super Admin. คุณสามารถเข้าถึงส่วนควบคุมพิเศษได้จากที่นี่
+            ยินดีต้อนรับ Admin. คุณสามารถเข้าถึงส่วนควบคุมพิเศษได้จากที่นี่
           </v-card-text>
           <v-card-actions>
-            <v-btn text color="blue darken-2">จัดการผู้ใช้</v-btn>
+            <v-btn v-if="isAdmin" to="/console/users" text color="blue darken-2">จัดการผู้ใช้</v-btn>
             <v-btn text color="blue darken-2">ดูสถิติ</v-btn>
           </v-card-actions>
         </v-card>
 
         <!-- User Profile Section -->
-        <v-card>
-          <v-list-item three-line>
-            <v-list-item-content>
-              <div class="overline mb-4">โปรไฟล์</div>
-              <v-list-item-title class="headline mb-1">
-                <!-- Corrected to use display_name -->
-                {{ loggedInUser ? loggedInUser.display_name : 'N/A' }}
-              </v-list-item-title>
-              <v-list-item-subtitle>{{ loggedInUser ? loggedInUser.email : 'N/A' }}</v-list-item-subtitle>
-              <v-list-item-subtitle class="font-weight-bold mt-2 success--text" v-if="isAdmin">{{ loggedInUser.position }}</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-avatar tile size="100">
-              <v-img src="/This is number 357.jpg"></v-img>
-            </v-list-item-avatar>
-          </v-list-item>
-
+        <v-card v-if="loggedInUser">
+          <v-card-title class="d-flex align-center">
+            <v-avatar size="100" class="mr-4">
+              <v-img :src="loggedInUser.profile_image_url || '/This is number 357.jpg'"></v-img>
+            </v-avatar>
+            <div>
+              <div class="headline">{{ loggedInUser.display_name }}</div>
+              <div class="subtitle-1">{{ loggedInUser.fullname }}</div>
+            </div>
+          </v-card-title>
           <v-divider></v-divider>
-
-          <v-list>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-phone</v-icon>
-              </v-list-item-icon>
+          <v-list dense>
+            <v-list-item v-if="loggedInUser.position">
+              <v-list-item-icon><v-icon>mdi-briefcase</v-icon></v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>081-234-5678</v-list-item-title>
-                <v-list-item-subtitle>เบอร์โทร</v-list-item-subtitle>
+                <v-list-item-subtitle>ตำแหน่ง</v-list-item-subtitle>
+                <v-list-item-title>{{ loggedInUser.position }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-
-            <v-divider inset></v-divider>
-
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-map-marker</v-icon>
-              </v-list-item-icon>
+            <v-list-item v-if="loggedInUser.address">
+              <v-list-item-icon><v-icon>mdi-map-marker</v-icon></v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>123/45 หมู่ 6 ต.ตัวอย่าง อ.เมือง จ.กรุงเทพฯ 10000</v-list-item-title>
                 <v-list-item-subtitle>ที่อยู่</v-list-item-subtitle>
+                <v-list-item-title>{{ loggedInUser.address }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item v-if="loggedInUser.phone">
+              <v-list-item-icon><v-icon>mdi-phone</v-icon></v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-subtitle>เบอร์โทร</v-list-item-subtitle>
+                <v-list-item-title>{{ loggedInUser.phone }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item v-if="loggedInUser.description">
+              <v-list-item-icon><v-icon>mdi-note-text</v-icon></v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-subtitle>คำอธิบาย</v-list-item-subtitle>
+                <v-list-item-title>{{ loggedInUser.description }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item v-if="loggedInUser.created_at">
+              <v-list-item-icon><v-icon>mdi-calendar</v-icon></v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-subtitle>บัญชีสร้างเมื่อ</v-list-item-subtitle>
+                <v-list-item-title>{{ loggedInUser.created_at }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list>
-
           <v-card-actions>
-            <v-btn color="primary" outlined>
+            <v-btn color="primary" outlined @click="openEditDialog">
               <v-icon left>mdi-pencil</v-icon>
               แก้ไขข้อมูล
             </v-btn>
@@ -72,31 +78,120 @@
             </v-btn>
           </v-card-actions>
         </v-card>
+
+        <!-- Edit Profile Dialog -->
+        <v-dialog v-model="editDialog" max-width="600px">
+          <v-card>
+            <v-card-title>
+              <span class="headline">แก้ไขโปรไฟล์</span>
+            </v-card-title>
+            <v-card-text>
+              <v-form ref="editForm">
+                <v-container>
+                  <v-row v-for="(value, key) in editableFields" :key="key">
+                    <v-col cols="4">
+                      <strong>{{ fieldLabels[key] || key }}</strong>
+                    </v-col>
+                    <v-col cols="8">
+                      <v-text-field v-model="editedUser[key]" :label="fieldLabels[key] || key" :disabled="key === idField" dense></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="closeEditDialog">ยกเลิก</v-btn>
+              <v-btn color="green darken-1" text @click="saveEdit">บันทึก</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-
 export default {
   name: 'ProfilePage',
-  computed: {
-    ...mapGetters('auth', ['loggedInUser']),
-    isAdmin() {
-      return this.loggedInUser && this.loggedInUser.position === 'admin';
+  data() {
+    return {
+      loggedInUser: null,
+      isAdmin: false,
+      editDialog: false,
+      editedUser: {},
+      idField: 'id',
+      editableFields: {},
+      fieldLabels: {
+        fullname: 'ชื่อ-นามสกุล',
+        display_name: 'ชื่อที่แสดง',
+        email: 'อีเมล',
+        phone: 'เบอร์โทร',
+        address: 'ที่อยู่',
+        position: 'ตำแหน่ง'
+      }
+    }
+  },
+  async mounted() {
+    let authUser = null;
+    try {
+      authUser = JSON.parse(localStorage.getItem('auth_user'));
+    } catch (e) {}
+    if (authUser && authUser.email) {
+      try {
+        const res = await fetch('http://localhost/dewgasohol_beta/deeplink_select.php');
+        const users = await res.json();
+        const found = users.find(u => u.email === authUser.email);
+        if (found) {
+          this.loggedInUser = found;
+          this.isAdmin = found.position === 'super admin';
+          // เตรียมฟิลด์ที่แก้ไขได้ (ยกเว้น id, email, position)
+          this.editableFields = {};
+          Object.keys(found).forEach(key => {
+            if (![this.idField, 'email', 'position'].includes(key)) {
+              this.editableFields[key] = found[key];
+            }
+          });
+        }
+      } catch (e) {
+        this.loggedInUser = null;
+        this.isAdmin = false;
+      }
     }
   },
   methods: {
-    ...mapActions('auth', ['logout']), // Map the logout action from the store
     logout() {
-      // The original logout action in the store clears localStorage and commits the mutation.
-      // We just need to call it and then redirect.
-      this.$store.dispatch('auth/logout');
-      // เพิ่มการลบข้อมูล user ออกจาก localStorage
       localStorage.removeItem('auth_user');
       this.$router.push('/deep_link/user_signin');
+    },
+    openEditDialog() {
+      // เตรียมข้อมูล user ที่จะแก้ไข (รวม id)
+      this.editedUser = { ...this.loggedInUser };
+      this.editDialog = true;
+    },
+    closeEditDialog() {
+      this.editDialog = false;
+      this.editedUser = {};
+    },
+    async saveEdit() {
+      try {
+        const res = await fetch('http://localhost/dewgasohol_beta/deeplink_update.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.editedUser)
+        });
+        const result = await res.json();
+        if (result.success) {
+          this.$toast && this.$toast.success('บันทึกสำเร็จ');
+          // อัปเดตข้อมูลใหม่
+          this.loggedInUser = { ...this.editedUser };
+          this.closeEditDialog();
+        } else {
+          this.$toast && this.$toast.error('บันทึกไม่สำเร็จ: ' + (result.message || ''));
+        }
+      } catch (e) {
+        this.$toast && this.$toast.error('เกิดข้อผิดพลาด');
+      }
     }
   }
 }
